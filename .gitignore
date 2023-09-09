@@ -1,0 +1,28 @@
+
+
+A typical .gitignore for an npm module could include the following:
+
+# node_modules
+node_modules
+
+# package-lock.json
+/package-lock.json
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Dependency directories
+/jspm_packages
+/bower_components
+/node_modules
+
+# IDE config files
+.idea
+.vscode
+.eslintrc
+.jshintrc
+
+# env files
+.env
