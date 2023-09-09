@@ -11,10 +11,7 @@ Table of Contents
 -----
 - [Installation](#Installation)
     - [Using npm](#Using-npm)
-    - [Manual Installation](#Manual-Installation)
 - [Usage](#Usage)
-- [Dependencies](#Dependencies)
-- [Contributing](#Contributing)
 - [License](#License)
 
 Installation
@@ -31,36 +28,13 @@ $ npm install -g @laststance/git-gpt-commit
 
 This command will install the Git extension globally on your system.
 
-Get your openai API key from [openai](https://platform.openai.com/account/api-keys) and add `.env` to OPENAI_API_KEY
+Get your openai API key from [openai](https://platform.openai.com/account/api-keys) and add `.env` file to `OPENAI_API_KEY` at any local project root.  
 
-.env
+`.env`
 ```
-OPENAI_API_KEY=your_openai_key
-```
-
-### Manual Installation
-Clone this repository or download the source code.
-
-```
-git clone https://github.com/laststance/git-commit-gpt.git
+OPENAI_API_KEY=our_openai_api_key
 ```
 
-Change to the project directory and install the required dependencies:
-```
-cd git-commit-gpt
-npm install
-```
-
-Add your OpenAI API key to the .env file:
-```
-OPENAI_API_KEY=your_openai_api_key
-```
-
-Insall globally and create a symbolic link using npm link:
-```
-npm i -g
-npm link
-```
 Usage
 -----
 
@@ -75,21 +49,6 @@ Run the Git extension:
 git gpt commit
 ```
 The script will summarize the Git changes since the last commit and generate a commit message using GPT-3. You will be prompted to confirm whether to use the suggested message or cancel the commit.
-
-Dependencies
-----
-- OpenAI - For generating commit messages using GPT-3.
-- Prompts - For creating a user-friendly command-line interface.
-- Dotenv - For loading environment variables from the .env file.
-
-Contributing
-----
-Contributions are welcome! Please feel free to open a pull request or create an issue if you find a bug or have suggestions for improvements.
-
-Fork the repository.
-Create a new branch with a descriptive name.
-Make your changes and commit them to your branch.
-Submit a pull request, detailing your changes and the motivation behind them.
 
 License
 ----
