@@ -57,7 +57,7 @@ const gptCommit = async () => {
   const confirm = await prompts({
     type: "confirm",
     name: "value",
-    message: `Suggested commit message: "${message}". Do you want to use it?`,
+    message: `${message}".`,
     initial: true,
   });
   
