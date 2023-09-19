@@ -1,9 +1,9 @@
 > Original package doesn't work due to config mistake 'package.json'. https://github.com/nooqta/git-commit-gpt  
 > Tharefore I fix it and republish as a '@laststance/git-gpt-commit'.
 
-Git Commit GPT-
+Git Commit GPT-3.5-turbo-instruct
 -----------
-An AI-powered Git extension that generates commit messages using OpenAI's GPT-3, streamlining the commit process and improving developer productivity.
+An AI-powered Git extension that generates commit messages using OpenAI's GPT-3.5-turbo-instruct, streamlining the commit process and improving developer productivity.
 
 ![Git GPT-Commit Demo](./assets/git-gpt-commit.gif)
 
