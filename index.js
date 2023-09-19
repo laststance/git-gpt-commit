@@ -42,7 +42,7 @@ const gptCommit = async () => {
   }
   const prompt = `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `;
   const parameters = {
-    model: "gpt-3.5-turbo-16k",
+    model: "gpt-3.5-turbo-instruct",
     prompt,
     temperature: 0,
     max_tokens: 50,
