@@ -62,7 +62,7 @@ const gptCommit = async () => {
   });
   
   if (confirm.value) {
-    execSync(`git commit -m "${message}"`);
+    execSync(`git commit -m ${message}.`);
     console.log("Committed with the suggested message.");
   } else {
     console.log("Commit canceled.");
