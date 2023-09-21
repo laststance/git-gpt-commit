@@ -41,7 +41,7 @@ const gptCommit = async () => {
     process.exit(0);
   }
   const prompt = `Generate a Git commit message based on the following summary: ${gitSummary}
-  The Commit message must wrap with double quote.
+  \n\nThe Commit message must wrap with double quote like this "your commit message"
   \n\nCommit message: `; 
   const parameters = {
     model: "gpt-3.5-turbo-instruct",
