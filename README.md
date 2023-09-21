@@ -1,39 +1,51 @@
 > Original package doesn't work due to config mistake 'package.json'. https://github.com/nooqta/git-commit-gpt  
 > Tharefore I fix it and republish as a '@laststance/git-gpt-commit'.
 
-Git Commit GPT-3
+Git Commit GPT-3.5-turbo-instruct
 -----------
-An AI-powered Git extension that generates commit messages using OpenAI's GPT-3, streamlining the commit process and improving developer productivity.
+An AI-powered Git extension that generates commit messages using OpenAI's GPT-3.5-turbo-instruct, streamlining the commit process and improving developer productivity.
 
 ![Git GPT-Commit Demo](./assets/git-gpt-commit.gif)
-
-Table of Contents
------
-- [Installation](#Installation)
-    - [Using npm](#Using-npm)
-- [Usage](#Usage)
-- [License](#License)
 
 Installation
 ------
 There are two ways to install the Git extension: using npm or manual installation.
 
-### Using npm
+- **Step1:** run the following command:
 
-To install the Git extension as an npm package, run the following command:
-
-```
-$ npm install -g @laststance/git-gpt-commit
+```bash
+npm install -g @laststance/git-gpt-commit
 ```
 
-This command will install the Git extension globally on your system.
+- **Step2:**  move to any languege your project root
 
-Get your openai API key from [openai](https://platform.openai.com/account/api-keys) and add `.env` file to `OPENAI_API_KEY` at any local project root.  
+```bash
+cd my-rust-project
+```
+
+- **Step3:**  add `.env` file to `.gitignore`
+
+```bash
+echo -e "\n.env" >> .gitignore
+```
+
+- **Step4:**  commit .gitignore
+
+```bash
+git add .
+git commit -m 'add .env to .gitignore'
+```
+
+> ❗️Step3 and 4 must be done for prevent leak your OpenAI API key on Github/GitLab.
+
+- **Step5:**  Get your openai API key from [openai](https://platform.openai.com/account/api-keys) and add `.env` file to `OPENAI_API_KEY`.
 
 `.env`
 ```
-OPENAI_API_KEY=our_openai_api_key
+OPENAI_API_KEY=your_openai_api_key
 ```
+
+✅ You've completed all setup!
 
 Usage
 -----
@@ -49,6 +61,14 @@ Run the Git extension:
 git gpt commit
 ```
 The script will summarize the Git changes since the last commit and generate a commit message using GPT-3. You will be prompted to confirm whether to use the suggested message or cancel the commit.
+
+
+Credits
+------
+
+Thanks to
+
+- Author of [original package](https://github.com/nooqta/git-commit-gpt)
 
 License
 ----
