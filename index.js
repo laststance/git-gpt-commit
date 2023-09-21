@@ -40,7 +40,9 @@ const gptCommit = async () => {
     console.log('No changes to commit. Commit canceled.');
     process.exit(0);
   }
-  const prompt = `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `;
+  const prompt = `Generate a Git commit message based on the following summary: ${gitSummary}
+  The Commit message must wrap with double quote.
+  \n\nCommit message: `; 
   const parameters = {
     model: "gpt-3.5-turbo-instruct",
     prompt,
@@ -62,7 +64,7 @@ const gptCommit = async () => {
   });
   
   if (confirm.value) {
-    execSync(`git commit -m ${message}.`);
+    execSync(`git commit -m ${message}`);
     console.log("Committed with the suggested message.");
   } else {
     console.log("Commit canceled.");
