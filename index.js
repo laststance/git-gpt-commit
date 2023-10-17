@@ -20,7 +20,7 @@ export async function getGitSummary() {
     openai = new OpenAIApi(configuration);
     
     const exec = promisify(originalExec);
-    const { stdout } = await exec("git diff --cached");
+    const { stdout } = await exec("git diff --cached -- . ':(exclude)*lock.json' ':(exclude)*lock.yaml'");
     const summary = stdout.trim();
     if (summary.length === 0) {
       return null;
