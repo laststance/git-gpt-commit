@@ -44,7 +44,7 @@ const gptCommit = async () => {
   \n\nThe Commit message must wrap with double quote like this "your commit message"
   \n\nCommit message: `; 
   const parameters = {
-    model: "gpt-4-1106-preview",
+    model: "gpt-3.5-turbo-instruct",
     prompt,
     temperature: 0,
     max_tokens: 50,
