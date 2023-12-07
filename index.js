@@ -43,7 +43,8 @@ const gptCommit = async () => {
   }
   const prompt = `Generate a Git commit message based on the following summary: ${gitSummary}
   \n\nThe Commit message must wrap with double quote like this "your commit message"
-  \n\nCommit message: `; 
+  \n\nCommit message: `;
+  console.log(model) 
   const parameters = {
     model,
     prompt,
