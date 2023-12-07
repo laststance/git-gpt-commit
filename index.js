@@ -8,6 +8,7 @@ import prompts from "prompts";
 import { program } from "commander";
 
 let openai;
+let model = "gpt-3.5-turbo-instruct"; // Default model
 
 export async function getGitSummary() {
   try {
@@ -44,7 +45,7 @@ const gptCommit = async () => {
   \n\nThe Commit message must wrap with double quote like this "your commit message"
   \n\nCommit message: `; 
   const parameters = {
-    model: "gpt-3.5-turbo-instruct",
+    model,
     prompt,
     temperature: 0,
     max_tokens: 50,
@@ -70,6 +71,7 @@ const gptCommit = async () => {
     console.log("Commit canceled.");
   }
 };
+
 const gitExtension = (args) => {
   // Extract the command and arguments from the command line
   const [command, ...rest] = args;
@@ -81,7 +83,24 @@ const gitExtension = (args) => {
       await gptCommit();
     });
 
-    // Add more commands here
+  program
+    .command("model")
+    .description("Select the model to use")
+    .action(async () => {
+      const response = await prompts({
+        type: "select",
+        name: "value",
+        message: "Select a model",
+        choices: [
+          { title: "gpt-3.5-turbo-instruct", value: "gpt-3.5-turbo-instruct" },
+          { title: "gpt-4-1106-preview", value: "gpt-4-1106-preview" }
+        ],
+        initial: 0
+      });
+
+      model = response.value;
+      console.log(`Model set to ${model}`);
+    });
 
   // Handle invalid commands
   program.on("command:*", () => {
