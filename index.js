@@ -8,7 +8,7 @@ import prompts from "prompts";
 import { program } from "commander";
 
 let openai;
-let model = "gpt-4-0125-preview"; // Default model
+let model = "gpt-3.5-turbo-1106"; // Default model
 
 export async function getGitSummary() {
   try {
