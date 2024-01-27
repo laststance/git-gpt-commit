@@ -94,7 +94,8 @@ const gitExtension = (args) => {
         message: "Select a model",
         choices: [
           { title: "gpt-3.5-turbo-instruct", value: "gpt-3.5-turbo-instruct" },
-          { title: "gpt-4-1106-preview", value: "gpt-4-1106-preview" }
+          { title: "gpt-4-1106-preview", value: "gpt-4-1106-preview" },
+          { title: "gpt-4-0125-preview", value: "gpt-4-0125-preview" } // New model added
         ],
         initial: 0
       });

@@ -22,7 +22,7 @@
   "dependencies": {
     "commander": "^10.0.0",
     "dotenv": "^16.0.3",
-    "openai": "^3.2.1",
+    "openai": "^4.26.0",
     "prompts": "^2.4.2"
   },
   "bin": {
