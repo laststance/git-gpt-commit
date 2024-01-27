@@ -42,7 +42,7 @@ const gptCommit = async () => {
   
   const messages = [
     {role: "system", content: "You are a helpful assistant."},
-    {role: "user", content: `Generate a Git commit message based on the following summary: ${gitSummary}`}
+    {role: "user", content: `Generate a Git commit message based on the following summary. That do not wrap in single or double quarts.: ${gitSummary}`}
   ];
   
   const parameters = {
@@ -63,7 +63,7 @@ const gptCommit = async () => {
   });
   
   if (confirm.value) {
-    execSync(`git commit -m "${message}"`);
+    execSync(`git commit -m "${message.replace(/"/g, '\\"')}"`);
     console.log("Committed with the suggested message.");
   } else {
     console.log("Commit canceled.");
