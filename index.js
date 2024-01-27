@@ -53,7 +53,7 @@ const gptCommit = async () => {
   
   const response = await openai.chat.completions.create(parameters);
   
-  const message = response.data.choices[0].message.content.trim();
+  const message = response.choices[0].message.content.trim();
   
   const confirm = await prompts({
     type: "confirm",
