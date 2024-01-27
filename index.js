@@ -39,22 +39,21 @@ const gptCommit = async () => {
     console.log('No changes to commit. Commit canceled.');
     process.exit(0);
   }
-  const prompt = `Generate a Git commit message based on the following summary: ${gitSummary}
-  \n\nThe Commit message must wrap with double quote like this "your commit message"
-  \n\nCommit message: `;
-  console.log(model) 
+  
+  const messages = [
+    {role: "system", content: "You are a helpful assistant."},
+    {role: "user", content: `Generate a Git commit message based on the following summary: ${gitSummary}`}
+  ];
+  
   const parameters = {
     model,
-    prompt,
-    temperature: 0,
+    messages,
     max_tokens: 50,
-    n: 1,
-    stop: null,
   };
   
-  const response = await openai.completions.create(parameters);
+  const response = await openai.chat.completions.create(parameters);
   
-  const message = response.data.choices[0].text.trim();
+  const message = response.data.choices[0].message.content.trim();
   
   const confirm = await prompts({
     type: "confirm",
@@ -64,7 +63,7 @@ const gptCommit = async () => {
   });
   
   if (confirm.value) {
-    execSync(`git commit -m ${message}`);
+    execSync(`git commit -m "${message}"`);
     console.log("Committed with the suggested message.");
   } else {
     console.log("Commit canceled.");
