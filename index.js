@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-import { Configuration, OpenAIApi } from "openai";
+import OpenAI from "openai";
 import { promisify } from 'util';
 import path from "path";
 import process from "process";
@@ -8,17 +8,15 @@ import prompts from "prompts";
 import { program } from "commander";
 
 let openai;
-let model = "gpt-3.5-turbo-instruct"; // Default model
+let model = "gpt-4-0125-preview"; // Default model
 
 export async function getGitSummary() {
   try {
     const dotenv = await import("dotenv");
     const envPath = path.join(process.cwd(), '.env');
     dotenv.config({ path: envPath });
-    const configuration = new Configuration({
-      apiKey: process.env.OPENAI_API_KEY
-    });
-    openai = new OpenAIApi(configuration);
+    openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
+
     
     const exec = promisify(originalExec);
     const { stdout } = await exec("git diff --cached -- . ':(exclude)*lock.json' ':(exclude)*lock.yaml'");
@@ -54,7 +52,7 @@ const gptCommit = async () => {
     stop: null,
   };
   
-  const response = await openai.createCompletion(parameters);
+  const response = await openai.completions.create(parameters);
   
   const message = response.data.choices[0].text.trim();
   
