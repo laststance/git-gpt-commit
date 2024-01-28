@@ -8,7 +8,7 @@ import prompts from "prompts";
 import { program } from "commander";
 
 let openai;
-let model = "gpt-3.5-turbo-1106"; // Default model
+let model = "gpt-4-turbo-preview"; // Default model
 
 export async function getGitSummary() {
   try {
@@ -42,12 +42,14 @@ const gptCommit = async () => {
   
   const messages = [
     {role: "system", content: "You are a helpful assistant."},
-    {role: "user", content: `Generate a Git commit message based on the following summary. That do not wrap in single or double quarts.: ${gitSummary}`}
+    {role: "user", content: `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `}
   ];
   
   const parameters = {
     model,
     messages,
+    n:1,
+    temperature: 0,
     max_tokens: 50,
   };
   
@@ -63,7 +65,7 @@ const gptCommit = async () => {
   });
   
   if (confirm.value) {
-    execSync(`git commit -m "${message.replace(/"/g, '\\"')}"`);
+    execSync(`git commit -m "${message.replace(/"/g, '\\"')}"`); // escape double quart
     console.log("Committed with the suggested message.");
   } else {
     console.log("Commit canceled.");
