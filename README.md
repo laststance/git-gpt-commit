@@ -60,7 +60,7 @@ Run the Git extension:
 ```
 git gpt commit
 ```
-The script will summarize the Git changes since the last commit and generate a commit message using GPT-3. You will be prompted to confirm whether to use the suggested message or cancel the commit.
+The script will summarize the Git changes since the last commit and generate a commit message using gpt-4-turbo-preview. You will be prompted to confirm whether to use the suggested message or cancel the commit.
 
 
 Credits
