@@ -2,7 +2,7 @@
 > Tharefore I fix it and republish as a '@laststance/git-gpt-commit'.
 
 <div align="center">
-    <h1>Git Commit GPT-3.5-turbo-instruct</h1>
+    <h1>Git Commit GPT-4-turbo-preview</h1>
     <p>An AI-powered Git extension that generates commit messages using OpenAI's GPT-3.5-turbo-instruct, streamlining the commit process and improving developer productivity.</p>
     <img src="./assets/preview.gif" />
 </div>
