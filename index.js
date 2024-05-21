@@ -8,7 +8,7 @@ import prompts from "prompts";
 import { program } from "commander";
 
 let openai;
-let model = "gpt-4-turbo-preview"; // Default model
+let model = "gpt-4o"; // Default model
 
 export async function getGitSummary() {
   try {
@@ -59,7 +59,7 @@ const gptCommit = async () => {
   const response = await openai.chat.completions.create(parameters);
 
   const message = response.choices[0].message.content
-    .replace(/[^\w\s.-]/gi, "")
+    .replace(/[^\w\s.:@<>-]/gi, "")
     .trim();
 
   const confirm = await prompts({
@@ -100,8 +100,8 @@ const gitExtension = (args) => {
         message: "Select a model",
         choices: [
           { title: "gpt-3.5-turbo-instruct", value: "gpt-3.5-turbo-instruct" },
-          { title: "gpt-4-1106-preview", value: "gpt-4-1106-preview" },
-          { title: "gpt-4-0125-preview", value: "gpt-4-0125-preview" }, // New model added
+          { title: "gpt-4-turbo", value: "gpt-4-turbo" },
+          { title: "gpt-4", value: "gpt-4" }, // New model added
         ],
         initial: 0,
       });
