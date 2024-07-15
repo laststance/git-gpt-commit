@@ -1,31 +1,31 @@
 {
-     "name": "@laststance/git-gpt-commit",
-     "version": "0.7.1",
-     "description": "An AI-powered Git extension that generates commit messages using OpenAI's GPT-3, streamlining the commit process and improving developer productivity.",
-     "main": "index.js",
-     "type": "module",
-     "scripts": {},
-     "repository": {
-          "type": "git",
-          "url": "git@github.com:laststance/git-commit-gpt.git"
-     },
-     "files": [
-          "README.md",
-          "index.js"
-     ],
-     "author": "Ryota Murakami <dojce1048@gmail.com> (https://github.com/ryota-murakami)",
-     "license": "MIT",
-     "bugs": {
-          "url": "https://github.com/laststance/git-commit-gpt/issues"
-     },
-     "homepage": "https://github.com/laststance/git-commit-gpt#readme",
-     "dependencies": {
-          "commander": "^10.0.0",
-          "dotenv": "^16.0.3",
-          "openai": "^4.26.0",
-          "prompts": "^2.4.2"
-     },
-     "bin": {
-          "git-gpt": "./index.js"
-     }
+  "name": "@laststance/git-gpt-commit",
+  "version": "0.7.2",
+  "description": "An AI-powered Git extension that generates commit messages using OpenAI's GPT-3, streamlining the commit process and improving developer productivity.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:laststance/git-commit-gpt.git"
+  },
+  "files": [
+    "README.md",
+    "index.js"
+  ],
+  "author": "Ryota Murakami <dojce1048@gmail.com> (https://github.com/ryota-murakami)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/laststance/git-commit-gpt/issues"
+  },
+  "homepage": "https://github.com/laststance/git-commit-gpt#readme",
+  "dependencies": {
+    "commander": "^10.0.0",
+    "dotenv": "^16.0.3",
+    "openai": "^4.26.0",
+    "prompts": "^2.4.2"
+  },
+  "bin": {
+    "git-gpt": "./index.js"
+  }
 }
