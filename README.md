@@ -1,5 +1,5 @@
 > Original package doesn't work due to config mistake 'package.json'. https://github.com/nooqta/git-commit-gpt  
-> Tharefore I fix it and republish as a '@laststance/git-gpt-commit'.
+> Therefore I fix it and republish as a '@laststance/git-gpt-commit'.
 
 <div align="center">
     <h1>Git Commit GPT-4o</h1>
@@ -17,7 +17,7 @@ There are two ways to install the Git extension: using npm or manual installatio
 npm install -g @laststance/git-gpt-commit
 ```
 
-- **Step2:**  move to any languege your project root
+- **Step2:**  move to any language your project root
 
 ```bash
 cd my-rust-project
