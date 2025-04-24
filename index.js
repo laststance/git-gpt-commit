@@ -11,12 +11,20 @@ import os from 'os'
 
 let openai
 let model = 'gpt-4o' // Default model
+let language = 'English' // Default language
 const CONFIG_FILE = path.join(os.homedir(), '.git-gpt-commit-config.json')
 
 // Function to save config to file
 function saveConfig(config) {
   try {
-    fs.writeFileSync(CONFIG_FILE, JSON.stringify(config, null, 2))
+    // Load existing config first
+    let existingConfig = {}
+    if (fs.existsSync(CONFIG_FILE)) {
+      existingConfig = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'))
+    }
+    // Merge with new config
+    const updatedConfig = { ...existingConfig, ...config }
+    fs.writeFileSync(CONFIG_FILE, JSON.stringify(updatedConfig, null, 2))
   } catch (error) {
     console.error('Error saving configuration:', error)
   }
@@ -29,6 +37,9 @@ function loadConfig() {
       const config = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'))
       if (config.model) {
         model = config.model
+      }
+      if (config.language) {
+        language = config.language
       }
     }
   } catch (error) {
@@ -71,7 +82,7 @@ const gptCommit = async () => {
     { role: 'system', content: 'You are a helpful assistant.' },
     {
       role: 'user',
-      content: `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `,
+      content: `Generate a Git commit message based on the following summary: ${gitSummary}\n\nWrite the commit message in ${language} language. Keep it concise, professional, and descriptive.\n\nCommit message: `,
     },
   ]
 
@@ -143,10 +154,42 @@ const gitExtension = (args) => {
     })
 
   program
+    .command('lang')
+    .description('Select the commit message language')
+    .action(async () => {
+      const response = await prompts({
+        type: 'select',
+        name: 'value',
+        message: 'Select a language for commit messages',
+        choices: [
+          { title: 'English', value: 'English' },
+          { title: 'Spanish', value: 'Spanish' },
+          { title: 'Japanese', value: 'Japanese' },
+          { title: 'French', value: 'French' },
+          { title: 'German', value: 'German' },
+          { title: 'Italian', value: 'Italian' },
+          { title: 'Korean', value: 'Korean' },
+          { title: 'Simplified Chinese', value: 'Simplified Chinese' },
+          { title: 'Traditional Chinese', value: 'Traditional Chinese' },
+          { title: 'Dutch', value: 'Dutch' },
+          { title: 'Russian', value: 'Russian' },
+          { title: 'Brazilian Portuguese', value: 'Brazilian Portuguese' },
+        ],
+        initial: 0,
+      })
+
+      language = response.value
+      // Save the selected language to config file
+      saveConfig({ language })
+      console.log(`Language set to ${language} and saved to configuration`)
+    })
+
+  program
     .command('config')
     .description('Show current configuration')
     .action(() => {
       console.log(`Current model: ${model}`)
+      console.log(`Current language: ${language}`)
     })
 
   // Handle invalid commands
