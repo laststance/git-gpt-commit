@@ -79,10 +79,16 @@ const gptCommit = async () => {
   }
 
   const messages = [
-    { role: 'system', content: 'You are a helpful assistant.' },
+    {
+      role: 'system',
+      content:
+        'You are a helpful assistant. Write the commit message in ' +
+        language +
+        '.',
+    },
     {
       role: 'user',
-      content: `Generate a Git commit message based on the following summary in ${language} language: ${gitSummary}\n\nCommit message: `,
+      content: `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `,
     },
   ]
 
@@ -164,16 +170,16 @@ const gitExtension = (args) => {
         choices: [
           { title: 'English', value: 'English' },
           { title: 'Spanish', value: 'Spanish' },
-          { title: 'Japanese', value: 'Japanese' },
-          { title: 'French', value: 'French' },
-          { title: 'German', value: 'German' },
-          { title: 'Italian', value: 'Italian' },
-          { title: 'Korean', value: 'Korean' },
-          { title: 'Simplified Chinese', value: 'Simplified Chinese' },
-          { title: 'Traditional Chinese', value: 'Traditional Chinese' },
-          { title: 'Dutch', value: 'Dutch' },
-          { title: 'Russian', value: 'Russian' },
-          { title: 'Brazilian Portuguese', value: 'Brazilian Portuguese' },
+          { title: 'Japanese', value: '日本語' },
+          { title: 'French', value: 'Français' },
+          { title: 'German', value: 'Deutsch' },
+          { title: 'Italian', value: 'Italiano' },
+          { title: 'Korean', value: '한국어' },
+          { title: 'Simplified Chinese', value: '简体中文' },
+          { title: 'Traditional Chinese', value: '繁體中文' },
+          { title: 'Dutch', value: 'Nederlands' },
+          { title: 'Russian', value: 'Русский' },
+          { title: 'Brazilian Portuguese', value: 'Português do Brasil' },
         ],
         initial: 0,
       })
