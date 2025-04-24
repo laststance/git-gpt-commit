@@ -82,7 +82,7 @@ const gptCommit = async () => {
     { role: 'system', content: 'You are a helpful assistant.' },
     {
       role: 'user',
-      content: `Generate a Git commit message based on the following summary: ${gitSummary}\n\nWrite the commit message in ${language} language. Keep it concise, professional, and descriptive.\n\nCommit message: `,
+      content: `Generate a Git commit message based on the following summary in ${language} language: ${gitSummary}\n\nCommit message: `,
     },
   ]
 
