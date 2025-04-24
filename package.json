@@ -4,7 +4,10 @@
   "description": "An AI-powered Git extension that generates commit messages using OpenAI's GPT-3, streamlining the commit process and improving developer productivity.",
   "main": "index.js",
   "type": "module",
-  "scripts": {},
+  "scripts": {
+    "prepare": "husky",
+    "prettier": "prettier --ignore-unknown --write ."
+  },
   "repository": {
     "type": "git",
     "url": "git@github.com:laststance/git-commit-gpt.git"
@@ -27,5 +30,16 @@
   },
   "bin": {
     "git-gpt": "./index.js"
+  },
+  "volta": {
+    "node": "22.15.0"
+  },
+  "devDependencies": {
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
+    "prettier": "^3.5.3"
+  },
+  "lint-staged": {
+    "*": "prettier --ignore-unknown --write"
   }
 }
