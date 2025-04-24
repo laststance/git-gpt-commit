@@ -2,7 +2,7 @@
 > Therefore I fix it and republish as a '@laststance/git-gpt-commit'.
 
 <div align="center">
-    <h1>Git Commit GPT-4o</h1>
+    <h1>Git GPT Commit</h1>
     <p>An AI-powered Git extension that generates commit messages using OpenAI's GPT-4o, streamlining the commit process and improving developer productivity.</p>
     <img src="./assets/preview.gif" />
 </div>
