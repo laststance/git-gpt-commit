@@ -1,0 +1,17 @@
+name: Test
+on:
+  pull_request: ~
+  push:
+    branches:
+      - main
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: szenius/set-timezone@v1.2
+        with:
+          timezoneLinux: 'Asia/Tokyo'
+      - uses: actions/checkout@v4
+      - uses: ./.github/actions/prepare
+      - name: Test
+        run: pnpm test
