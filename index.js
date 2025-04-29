@@ -101,7 +101,7 @@ const gptCommit = async () => {
   }
 
   const response = await openai.chat.completions.create(parameters)
-
+  console.log(response.choices[0].message.content)
   const message = response.choices[0].message.content
     .replace(/[^\w\s.:@<>/-]/gi, '')
     .trim()
