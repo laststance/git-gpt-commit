@@ -8,6 +8,7 @@ import prompts from 'prompts'
 import { program } from 'commander'
 import fs from 'fs'
 import os from 'os'
+import { sanitizeCommitMessage } from './utils/sanitizeCommitMessage.js'
 
 let openai
 let model = 'gpt-4o' // Default model
@@ -101,20 +102,19 @@ const gptCommit = async () => {
   }
 
   const response = await openai.chat.completions.create(parameters)
-  console.log(response.choices[0].message.content)
-  const message = response.choices[0].message.content
-    .replace(/[^\w\s.:@<>/-]/gi, '')
-    .trim()
+
+  const message = response.choices[0].message.content.trim()
+  const sanitizedMessage = sanitizeCommitMessage(message)
 
   const confirm = await prompts({
     type: 'confirm',
     name: 'value',
-    message: `${message}.`,
+    message: `${sanitizedMessage}.`,
     initial: true,
   })
 
   if (confirm.value) {
-    execSync(`git commit -m "${message}"`) // escape double quart
+    execSync(`git commit -m "${sanitizedMessage}"`) // escape double quart
     console.log('Committed with the suggested message.')
   } else {
     console.log('Commit canceled.')

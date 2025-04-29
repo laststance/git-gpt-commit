@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "prepare": "husky",
-    "prettier": "prettier --ignore-unknown --write ."
+    "prettier": "prettier --ignore-unknown --write .",
+    "test": "vitest"
   },
   "repository": {
     "type": "git",
@@ -35,9 +36,14 @@
     "node": "22.15.0"
   },
   "devDependencies": {
+    "@vitest/coverage-v8": "3.1.2",
+    "@vitest/ui": "^3.1.2",
     "husky": "^9.1.7",
+    "jsdom": "^26.1.0",
     "lint-staged": "^15.5.1",
-    "prettier": "^3.5.3"
+    "prettier": "^3.5.3",
+    "vite": "^6.3.3",
+    "vitest": "^3.1.2"
   },
   "lint-staged": {
     "*": "prettier --ignore-unknown --write"
