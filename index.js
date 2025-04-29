@@ -102,7 +102,6 @@ const gptCommit = async () => {
   }
 
   const response = await openai.chat.completions.create(parameters)
-
   const message = response.choices[0].message.content.trim()
   const sanitizedMessage = sanitizeCommitMessage(message)
 
@@ -114,7 +113,7 @@ const gptCommit = async () => {
   })
 
   if (confirm.value) {
-    execSync(`git commit -m "${sanitizedMessage}"`) // escape double quart
+    execSync(`git commit -m "${sanitizedMessage}"`)
     console.log('Committed with the suggested message.')
   } else {
     console.log('Commit canceled.')
