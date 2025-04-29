@@ -15,7 +15,8 @@
   },
   "files": [
     "README.md",
-    "index.js"
+    "index.js",
+    "utils"
   ],
   "author": "Ryota Murakami <dojce1048@gmail.com> (https://github.com/ryota-murakami)",
   "license": "MIT",
