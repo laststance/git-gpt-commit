@@ -1,25 +1,22 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { validateTestFixtureCommitMessage } from '../utils/validateTestFixtureCommitMessage'
 import * as path from 'path'
 import * as fs from 'fs'
-import OpenAI from 'openai'
+
+vi.mock('child_process', () => {
+  return {
+    execSync: vi.fn(),
+  }
+})
+
 import { execSync } from 'child_process'
-import dotenv from 'dotenv'
-
-dotenv.config({ path: path.join(process.cwd(), '.env') })
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-
-const mockExec = vi.fn()
-vi.mock('child_process', () => ({
-  execSync: mockExec,
-}))
 
 describe('Test Fixture Commit Message Validation', () => {
   beforeEach(() => {
     vi.resetAllMocks()
   })
 
-  it('should validate commit messages when test fixture files are modified', async () => {
+  it('should validate commit messages when test fixture files are modified', () => {
     const testFixtureDiff = `
 diff --git a/test/fixtures/array/chunk.js b/test/fixtures/array/chunk.js
 index 1234567..abcdefg 100644
@@ -35,40 +32,19 @@ index 1234567..abcdefg 100644
   * @param {number} [size=1] - The length of each chunk
 `
 
-    mockExec.mockReturnValue(testFixtureDiff)
+    execSync.mockReturnValue(testFixtureDiff)
 
-    const messages = [
-      {
-        role: 'system',
-        content:
-          'You are a helpful assistant. Write the commit message in English. This commit modifies test fixtures, so begin your message with "test:" and include "update fixture for [functionality]".',
-      },
-      {
-        role: 'user',
-        content: `Generate a Git commit message based on the following summary: ${testFixtureDiff}\n\nCommit message: `,
-      },
-    ]
-
-    const parameters = {
-      model: 'gpt-4o',
-      messages,
-      n: 1,
-      temperature: 0,
-      max_tokens: 50,
-    }
-
-    const response = await openai.chat.completions.create(parameters)
-    const message = response.choices[0].message.content.trim()
+    const validCommitMessage = 'test: update fixture for array methods'
 
     const isValidCommitMessage = validateTestFixtureCommitMessage(
-      message,
+      validCommitMessage,
       'array',
     )
 
     expect(isValidCommitMessage).toBe(true)
   })
 
-  it('should reject invalid commit messages for fixture changes', async () => {
+  it('should reject invalid commit messages for fixture changes', () => {
     const testFixtureDiff = `
 diff --git a/test/fixtures/string/camelCase.js b/test/fixtures/string/camelCase.js
 index 1234567..abcdefg 100644
@@ -82,33 +58,12 @@ index 1234567..abcdefg 100644
   * @param {string} string - The string to convert
 `
 
-    mockExec.mockReturnValue(testFixtureDiff)
+    execSync.mockReturnValue(testFixtureDiff)
 
-    const messages = [
-      {
-        role: 'system',
-        content:
-          'You are a helpful assistant. Write the commit message in English. This is a bugfix, so begin your message with "fix:".',
-      },
-      {
-        role: 'user',
-        content: `Generate a Git commit message based on the following summary: ${testFixtureDiff}\n\nCommit message: `,
-      },
-    ]
-
-    const parameters = {
-      model: 'gpt-4o',
-      messages,
-      n: 1,
-      temperature: 0,
-      max_tokens: 50,
-    }
-
-    const response = await openai.chat.completions.create(parameters)
-    const message = response.choices[0].message.content.trim()
+    const invalidCommitMessage = 'fix: update some code'
 
     const isValidCommitMessage = validateTestFixtureCommitMessage(
-      message,
+      invalidCommitMessage,
       'string',
     )
 
