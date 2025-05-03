@@ -16,13 +16,7 @@ import dotenv from 'dotenv'
 
 dotenv.config({ path: path.join(process.cwd(), '.env') })
 
-const hasValidApiKey =
-  !!process.env.OPENAI_API_KEY && process.env.OPENAI_API_KEY.startsWith('sk-')
-
-let openai
-if (hasValidApiKey) {
-  openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
-}
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
 
 describe('Test Fixture Commit Message Validation', () => {
   beforeEach(() => {
@@ -30,10 +24,6 @@ describe('Test Fixture Commit Message Validation', () => {
   })
 
   it('should validate commit messages when test fixture files are modified', async () => {
-    if (!hasValidApiKey) {
-      console.log('Skipping OpenAI API test: No valid API key available')
-      return
-    }
     const testFixtureDiff = `
 diff --git a/test/fixtures/array/chunk.js b/test/fixtures/array/chunk.js
 index 1234567..abcdefg 100644
@@ -83,10 +73,6 @@ index 1234567..abcdefg 100644
   })
 
   it('should reject invalid commit messages for fixture changes', async () => {
-    if (!hasValidApiKey) {
-      console.log('Skipping OpenAI API test: No valid API key available')
-      return
-    }
     const testFixtureDiff = `
 diff --git a/test/fixtures/string/camelCase.js b/test/fixtures/string/camelCase.js
 index 1234567..abcdefg 100644
