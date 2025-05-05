@@ -16,7 +16,7 @@ importers:
         version: 16.5.0
       openai:
         specifier: ^4.26.0
-        version: 4.96.2(ws@8.18.1)
+        version: 4.97.0(ws@8.18.1)
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
@@ -919,8 +919,8 @@ packages:
     resolution: {integrity: sha512-VXJjc87FScF88uafS3JllDgvAm+c/Slfz06lorj2uAY34rlUu0Nt+v8wreiImcrgAjjIHp1rXpTDlLOGw29WwQ==}
     engines: {node: '>=18'}
 
-  openai@4.96.2:
-    resolution: {integrity: sha512-R2XnxvMsizkROr7BV3uNp1q/3skwPZ7fmPjO1bXLnfB4Tu5xKxrT1EVwzjhxn0MZKBKAvOaGWS63jTMN6KrIXA==}
+  openai@4.97.0:
+    resolution: {integrity: sha512-LRoiy0zvEf819ZUEJhgfV8PfsE8G5WpQi4AwA1uCV8SKvvtXQkoWUFkepD6plqyJQRghy2+AEPQ07FrJFKHZ9Q==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -2076,7 +2076,7 @@ snapshots:
     dependencies:
       mimic-function: 5.0.1
 
-  openai@4.96.2(ws@8.18.1):
+  openai@4.97.0(ws@8.18.1):
     dependencies:
       '@types/node': 18.19.87
       '@types/node-fetch': 2.6.12
