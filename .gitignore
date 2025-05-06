@@ -21,6 +21,7 @@ npm-debug.log*
 
 # env files
 .env
+tests/.env.test
 
 # Added by Claude Task Master
 yarn-debug.log*
