@@ -13,5 +13,8 @@ jobs:
           timezoneLinux: 'Asia/Tokyo'
       - uses: actions/checkout@v4
       - uses: ./.github/actions/prepare
+      - name: Create .env file
+        run: |
+          echo "OPENAI_API_KEY=${{ secrets.OPENAI_API_KEY }}" > .env
       - name: Test
         run: pnpm test
