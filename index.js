@@ -202,7 +202,6 @@ const gitExtension = (args) => {
   program.on('command:*', () => {
     console.error('Invalid command: %s\n', program.args.join(' '))
     program.help()
-    process.exit(1)
   })
   program.parse(process.argv)
 }
