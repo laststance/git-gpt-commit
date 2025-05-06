@@ -1,0 +1,5 @@
+feat(user): Add default name handling to greet function
+
+- Add check for empty name parameter in greet function
+- Set 'Guest' as the default name when none is provided
+- Update JSDoc with new behavior details 
