@@ -54,7 +54,7 @@ export function mockOpenAIError(errorMessage = 'API Error', statusCode = 500) {
 export function mockUserInput(responses) {
   let callIndex = 0
 
-  return vi.fn().mockImplementation(() => {
+  return vi.fn().mockImplementation(async () => {
     if (callIndex < responses.length) {
       return Promise.resolve({ value: responses[callIndex++] })
     }

@@ -1,13 +1,13 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import path from 'path'
-import fs from 'fs'
+
+import * as gitGptCommit from '../index.js'
+
 import {
   setupTestRepo,
   copyFixture,
   modifyAndStageFile,
   cleanupTestRepo,
 } from './setup.js'
-import * as gitGptCommit from '../index.js'
 
 describe('Git GPT Commit', () => {
   let tempDir
@@ -78,14 +78,13 @@ describe('Git GPT Commit', () => {
       expect(gitGptCommit.getGitSummary).toHaveBeenCalled()
     })
 
-    it('throws an error when there are no changes', async () => {
+    it('returns null when there are no changes', async () => {
       // Temporarily modify the mock to simulate no changes
-      vi.mocked(gitGptCommit.getGitSummary).mockImplementationOnce(() => {
-        throw new Error('No changes to commit')
-      })
+      vi.mocked(gitGptCommit.getGitSummary).mockResolvedValueOnce(null)
 
       // Call getGitSummary with no changes
-      expect(() => gitGptCommit.getGitSummary()).toThrow('No changes to commit')
+      const result = await gitGptCommit.getGitSummary()
+      expect(result).toBeNull()
     })
   })
 

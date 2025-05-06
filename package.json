@@ -7,7 +7,9 @@
   "scripts": {
     "prepare": "husky",
     "prettier": "prettier --ignore-unknown --write .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "lint": "eslint . --ext .ts,.tsx,.js,jsx,cjs,mjs",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js,jsx,cjs,mjs --fix"
   },
   "repository": {
     "type": "git",
@@ -37,11 +39,19 @@
     "node": "22.15.0"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.32.0",
+    "@typescript-eslint/parser": "^8.32.0",
     "@vitest/coverage-v8": "3.1.2",
     "@vitest/ui": "^3.1.2",
+    "eslint": "8.57.0",
+    "eslint-config-ts-prefixer": "2.0.0-beta.1",
+    "eslint-import-resolver-typescript": "^4.3.4",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-prettier": "^5.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",
     "prettier": "^3.5.3",
+    "typescript": "^5.8.3",
     "vite": "^6.3.3",
     "vitest": "^3.1.2"
   },
