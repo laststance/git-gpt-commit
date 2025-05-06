@@ -21,12 +21,12 @@ vi.mock('openai', () => {
   }
 })
 
-// index.jsモジュール全体をモック
+// Mock the entire index.js module
 vi.mock('../index.js', () => {
   return {
     getGitSummary: vi.fn((options) => {
       try {
-        // 実際のdiffコマンドを実行せず、ファイルの変更があるかチェック
+        // Check if there are file changes without actually executing the diff command
         const gitStatus = require('child_process')
           .execSync('git status --porcelain')
           .toString()
@@ -35,8 +35,8 @@ vi.mock('../index.js', () => {
           throw new Error('No changes to commit')
         }
 
-        // モックされたdiffの内容を返す
-        return `diff --git a/file1.js b/file1.js\nindex 123456..789012 100644\n--- a/file1.js\n+++ b/file1.js\n@@ -1,5 +1,8 @@\nfunction greet(name) {\n-  return \`Hello, \${name}!\`;\n+  // 名前が空の場合のデフォルト値を追加\n+  const userName = name || 'Guest';\n+  return \`Hello, \${userName}!\`;\n }`
+        // Return mocked diff content
+        return `diff --git a/file1.js b/file1.js\nindex 123456..789012 100644\n--- a/file1.js\n+++ b/file1.js\n@@ -1,5 +1,8 @@\nfunction greet(name) {\n-  return \`Hello, \${name}!\`;\n+  // Add default value when name is empty\n+  const userName = name || 'Guest';\n+  return \`Hello, \${userName}!\`;\n }`
       } catch (error) {
         throw new Error('Failed to get git summary')
       }
@@ -45,40 +45,40 @@ vi.mock('../index.js', () => {
       return 'Mock commit message'
     }),
     gitExtension: vi.fn(),
-    // その他必要な関数やオブジェクト
+    // Other necessary functions or objects
   }
 })
 
-// fs モジュールをモック
+// Mock fs module
 vi.mock('fs', async () => {
   const actual = await vi.importActual('fs')
 
   return {
     ...actual,
     existsSync: vi.fn((path) => {
-      // 特定のパスのみモックレスポンスを返す
+      // Return mock response only for specific paths
       if (path.includes('.git-gpt-commit-config.json')) {
         return true
       }
-      // それ以外は実際の実装を使用
+      // Use actual implementation for others
       return actual.existsSync(path)
     }),
     readFileSync: vi.fn((path, options) => {
-      // コンフィグファイルの場合、モックデータを返す
+      // Return mock data for config file
       if (path.includes('.git-gpt-commit-config.json')) {
         return JSON.stringify({
           model: 'gpt-4o',
           language: 'English',
         })
       }
-      // それ以外は実際の実装を使用
+      // Use actual implementation for others
       return actual.readFileSync(path, options)
     }),
     writeFileSync: vi.fn(),
   }
 })
 
-// commanderをモック
+// Mock commander
 vi.mock('commander', () => {
   const mockProgram = {
     command: vi.fn().mockReturnThis(),
@@ -95,7 +95,7 @@ vi.mock('commander', () => {
   }
 })
 
-// child_processをモック
+// Mock child_process
 vi.mock('child_process', async () => {
   const actual = await vi.importActual('child_process')
 
@@ -103,24 +103,24 @@ vi.mock('child_process', async () => {
     ...actual,
     execSync: vi.fn((command) => {
       if (typeof command === 'string') {
-        // git statusコマンドの場合は変更があるとみなす
+        // Treat as having changes for git status commands
         if (command.includes('git status')) {
           return Buffer.from('M file1.js')
         }
 
-        // git commitコマンドの場合はモック応答
+        // Mock response for git commit commands
         if (command.includes('git commit')) {
           return Buffer.from('Commit successful')
         }
       }
 
-      // その他のコマンドは実際に実行
+      // Actually execute other commands
       return actual.execSync(command)
     }),
     exec: vi.fn((command, callback) => {
       if (command.includes('git diff')) {
         const stdout =
-          "diff --git a/file1.js b/file1.js\nindex 123456..789012 100644\n--- a/file1.js\n+++ b/file1.js\n@@ -1,5 +1,8 @@\nfunction greet(name) {\n-  return `Hello, ${name}!`;\n+  // 名前が空の場合のデフォルト値を追加\n+  const userName = name || 'Guest';\n+  return `Hello, ${userName}!`;\n }"
+          "diff --git a/file1.js b/file1.js\nindex 123456..789012 100644\n--- a/file1.js\n+++ b/file1.js\n@@ -1,5 +1,8 @@\nfunction greet(name) {\n-  return \`Hello, \${name}!\`;\n+  // Add default value when name is empty\n+  const userName = name || 'Guest';\n+  return \`Hello, \${userName}!\`;\n }"
         callback(null, { stdout })
       } else {
         callback(null, { stdout: '' })
@@ -129,12 +129,12 @@ vi.mock('child_process', async () => {
   }
 })
 
-// promptsモジュールをモック
+// Mock prompts module
 vi.mock('prompts', () => ({
   default: vi.fn().mockResolvedValue({ value: true }),
 }))
 
-// process.exitをモック
+// Mock process.exit
 vi.stubGlobal('process', {
   ...process,
   exit: vi.fn((code) => {

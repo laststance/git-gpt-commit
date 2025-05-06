@@ -17,9 +17,50 @@ if (fs.existsSync(testEnvPath)) {
  * @returns {string} Path to the created temporary directory
  */
 export function setupTestRepo() {
+  // Find the project root to access fixtures
+  let projectRoot = process.cwd()
+  let currentPath = projectRoot
+  while (!fs.existsSync(path.join(currentPath, 'package.json'))) {
+    const parentPath = path.dirname(currentPath)
+    if (parentPath === currentPath) break
+    currentPath = parentPath
+  }
+  if (fs.existsSync(path.join(currentPath, 'package.json'))) {
+    projectRoot = currentPath
+  }
+
   // Create a temporary directory
   const tempDir = path.join(os.tmpdir(), `git-gpt-commit-test-${Date.now()}`)
   fs.mkdirSync(tempDir, { recursive: true })
+
+  // Create fixtures directory in the temp directory
+  const fixturesDir = path.join(tempDir, 'fixtures')
+  fs.mkdirSync(fixturesDir, { recursive: true })
+
+  // Copy fixture files from original project to test directory
+  const sourceFixturesDir = path.join(projectRoot, 'fixtures')
+  if (fs.existsSync(sourceFixturesDir)) {
+    const files = fs.readdirSync(sourceFixturesDir)
+    files.forEach((file) => {
+      const sourcePath = path.join(sourceFixturesDir, file)
+      const destPath = path.join(fixturesDir, file)
+
+      if (fs.statSync(sourcePath).isFile()) {
+        fs.copyFileSync(sourcePath, destPath)
+      } else if (fs.statSync(sourcePath).isDirectory()) {
+        // Handle subdirectories like 'expected'
+        fs.mkdirSync(destPath, { recursive: true })
+        const subFiles = fs.readdirSync(sourcePath)
+        subFiles.forEach((subFile) => {
+          const subSourcePath = path.join(sourcePath, subFile)
+          const subDestPath = path.join(destPath, subFile)
+          if (fs.statSync(subSourcePath).isFile()) {
+            fs.copyFileSync(subSourcePath, subDestPath)
+          }
+        })
+      }
+    })
+  }
 
   // Initialize Git repository
   process.chdir(tempDir)
@@ -40,7 +81,17 @@ export function setupTestRepo() {
  * @returns {string} Path to the copied file
  */
 export function copyFixture(fixtureName, destName = fixtureName) {
-  // Find the project root by looking for package.json up the directory tree
+  // First check if fixture exists in the current working directory
+  const localFixturePath = path.join(process.cwd(), 'fixtures', fixtureName)
+  const destPath = path.join(process.cwd(), destName)
+
+  // If fixture exists locally, use it
+  if (fs.existsSync(localFixturePath)) {
+    fs.copyFileSync(localFixturePath, destPath)
+    return destPath
+  }
+
+  // Otherwise, look for it in the project root
   let projectRoot = process.cwd()
   let currentPath = projectRoot
 
@@ -59,7 +110,6 @@ export function copyFixture(fixtureName, destName = fixtureName) {
   }
 
   const fixturePath = path.join(projectRoot, 'fixtures', fixtureName)
-  const destPath = path.join(process.cwd(), destName)
 
   if (!fs.existsSync(fixturePath)) {
     // Create a mock file if the fixture directory doesn't exist
@@ -94,6 +144,5 @@ export function modifyAndStageFile(filePath, content) {
  */
 export function cleanupTestRepo(tempDir) {
   // Delete the directory after the test
-  // テスト後にディレクトリを削除
   fs.rmSync(tempDir, { recursive: true, force: true })
 }
