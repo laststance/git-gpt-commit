@@ -94,6 +94,5 @@ export function modifyAndStageFile(filePath, content) {
  */
 export function cleanupTestRepo(tempDir) {
   // Delete the directory after the test
-  // テスト後にディレクトリを削除
   fs.rmSync(tempDir, { recursive: true, force: true })
 }
