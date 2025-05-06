@@ -1,0 +1,12 @@
+.vscode
+node_modules
+build
+dist
+.github
+.git
+.idea
+.next
+.husky
+storybook-static
+**/mockServiceWorker.js
+/fixture

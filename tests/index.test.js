@@ -1,13 +1,16 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import path from 'path'
 import fs from 'fs'
+import path from 'path'
+
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+
+import * as gitGptCommit from '../index.js'
+
 import {
   setupTestRepo,
   copyFixture,
   modifyAndStageFile,
   cleanupTestRepo,
 } from './setup.js'
-import * as gitGptCommit from '../index.js'
 
 describe('Git GPT Commit', () => {
   let tempDir
@@ -85,7 +88,9 @@ describe('Git GPT Commit', () => {
       })
 
       // Call getGitSummary with no changes
-      expect(() => gitGptCommit.getGitSummary()).toThrow('No changes to commit')
+      expect(async () => gitGptCommit.getGitSummary()).toThrow(
+        'No changes to commit',
+      )
     })
   })
 

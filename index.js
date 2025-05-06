@@ -1,13 +1,15 @@
 #!/usr/bin/env node
-import OpenAI from 'openai'
-import { promisify } from 'util'
-import path from 'path'
-import process from 'process'
 import { exec as originalExec, execSync } from 'child_process'
-import prompts from 'prompts'
-import { program } from 'commander'
 import fs from 'fs'
 import os from 'os'
+import path from 'path'
+import process from 'process'
+import { promisify } from 'util'
+
+import { program } from 'commander'
+import OpenAI from 'openai'
+import prompts from 'prompts'
+
 import { sanitizeCommitMessage } from './utils/sanitizeCommitMessage.js'
 
 let openai

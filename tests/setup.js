@@ -1,7 +1,8 @@
 import { execSync } from 'child_process'
 import fs from 'fs'
-import path from 'path'
 import os from 'os'
+import path from 'path'
+
 import dotenv from 'dotenv'
 
 // Load environment variables for testing
