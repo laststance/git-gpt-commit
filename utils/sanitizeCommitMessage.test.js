@@ -42,6 +42,7 @@ describe('sanitizeCommitMessage', () => {
     ).toBe('refactor: move code @ <main> /src/utils - done.')
   })
 
+  // TODO should allow emojis
   it('should remove emojis and unsupported unicode', () => {
     expect(sanitizeCommitMessage('fix: bug 🐛🔥💥')).toBe('fix: bug ')
   })
