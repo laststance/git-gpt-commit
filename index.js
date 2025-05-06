@@ -15,6 +15,17 @@ import { sanitizeCommitMessage } from './utils/sanitizeCommitMessage.js'
 let openai
 let model = 'gpt-4o' // Default model
 let language = 'English' // Default language
+// Define prefixState using closure for safer state management
+const prefixState = (() => {
+  let enabled = false // Default is disabled
+  return {
+    isEnabled: () => enabled,
+    setEnabled: (value) => {
+      enabled = value
+      return value
+    },
+  }
+})()
 const CONFIG_FILE = path.join(os.homedir(), '.git-gpt-commit-config.json')
 
 // Function to save config to file
@@ -43,6 +54,9 @@ function loadConfig() {
       }
       if (config.language) {
         language = config.language
+      }
+      if (config.prefixEnabled !== undefined) {
+        prefixState.setEnabled(config.prefixEnabled)
       }
     }
   } catch (error) {
@@ -91,7 +105,9 @@ const gptCommit = async () => {
     },
     {
       role: 'user',
-      content: `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `,
+      content: prefixState.isEnabled()
+        ? `Generate a Git commit message based on the following summary, with an appropriate prefix (add:, fix:, feat:, refactor:, chore:, perf:, test:, style:, docs:, merge:, chore:, build:, ci:, revert:, merge:) based on the type of changes: ${gitSummary}\n\nCommit message: `
+        : `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `,
     },
   ]
 
@@ -192,11 +208,42 @@ const gitExtension = (_args) => {
     })
 
   program
+    .command('prefix')
+    .description('Toggle commit message prefix (e.g., fix:, feat:, refactor:)')
+    .action(async () => {
+      // Show the current state for user information
+      console.log(
+        `Prefixes are currently ${prefixState.isEnabled() ? 'enabled' : 'disabled'}.`,
+      )
+
+      const response = await prompts({
+        type: 'select',
+        name: 'value',
+        message: 'Set commit message prefixes',
+        choices: [
+          { title: 'Enable prefixes', value: true },
+          { title: 'Disable prefixes', value: false },
+        ],
+        initial: prefixState.isEnabled() ? 0 : 1,
+      })
+
+      // Update state and save to config
+      const newValue = prefixState.setEnabled(response.value)
+      saveConfig({ prefixEnabled: newValue })
+      console.log(
+        `Prefixes ${newValue ? 'enabled' : 'disabled'} and saved to configuration`,
+      )
+    })
+
+  program
     .command('config')
     .description('Show current configuration')
     .action(() => {
       console.log(`Current model: ${model}`)
       console.log(`Current language: ${language}`)
+      console.log(
+        `Prefixes: ${prefixState.isEnabled() ? 'enabled' : 'disabled'}`,
+      )
     })
 
   // Handle invalid commands
