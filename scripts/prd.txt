@@ -1,0 +1,252 @@
+<context>
+# Overview  
+Git GPT Commit is an AI-powered Git extension that generates commit messages using OpenAI's GPT models. It streamlines the commit process and improves developer productivity by automatically analyzing staged changes and creating meaningful, descriptive commit messages.
+
+# Core Features  
+1. Automatic Commit Message Generation
+   - Analyze staged Git changes to understand code modifications
+   - Generate contextually relevant commit messages based on code changes
+   - Support for conventional commit format
+
+2. Multiple GPT Model Support
+   - Integration with various OpenAI models (gpt-3.5-turbo-instruct, gpt-4-turbo, gpt-4)
+   - Model selection and configuration for optimal results
+
+3. Language Support
+   - Generate commit messages in multiple languages
+   - Language preference configuration
+
+4. User Configuration
+   - Save user preferences to the user's home directory
+   - Command-line interface for easy configuration
+
+5. Command-line Interface
+   - Integration with Git as a custom command
+   - Easy-to-use commands for generating commit messages
+   - Configuration management commands
+
+# Technical Architecture  
+## Components
+1. Core Functionality
+   - Main entry point (index.js) with key functions:
+     - getGitSummary(): Gets the git diff summary of staged changes
+     - gptCommit(): Generates a commit message using OpenAI API
+     - gitExtension(): Sets up the CLI commands
+   
+2. Utility Functions
+   - sanitizeCommitMessage.js: Cleans up generated commit messages
+   - Additional utility modules for configuration management
+
+3. Configuration Management
+   - Environment variables (.env file) for the OpenAI API key
+   - Local config file (~/.git-gpt-commit-config.json) for user preferences
+   - Command-line options via Commander.js
+
+4. CLI Interface
+   - Commander.js for command-line argument parsing
+   - Custom Git commands through Git extension mechanism
+
+5. OpenAI Integration
+   - OpenAI API client setup and authentication
+   - Prompt construction for different use cases
+   - Response parsing and formatting
+
+# Development Roadmap  
+## Phase 1: Core Functionality (MVP)
+1. Set up project structure and dependencies
+2. Implement Git diff summary extraction
+3. Develop OpenAI API integration for basic commit message generation
+4. Create CLI commands for commit message generation
+5. Implement configuration storage mechanism
+6. Add basic sanitization for commit messages
+7. Create documentation for basic usage
+
+## Phase 2: Enhanced Features
+1. Support for multiple GPT models and configuration
+2. Add language selection options
+3. Implement commit message formatting options
+4. Add commit prefix/type detection
+5. Enhance error handling and edge cases
+6. Improve performance for large diffs
+7. Add testing for core components
+
+## Phase 3: Advanced Capabilities
+1. Implement smart diffing with context awareness
+2. Add custom prompt template support
+3. Create pre-commit hook integration
+4. Develop batch processing for multiple commits
+5. Add support for commit message editing
+6. Implement offline mode with caching
+7. Add analytics for usage tracking (optional)
+
+# Logical Dependency Chain
+1. Core Git Integration
+   - Git diff extraction must be implemented first as foundation
+   - OpenAI API integration follows to enable basic message generation
+   - Message sanitization ensures quality output
+
+2. User Experience
+   - CLI commands provide the interface for user interaction
+   - Configuration storage enables persistent preferences
+   - Model selection expands capabilities
+
+3. Advanced Features
+   - Language support builds on basic functionality
+   - Advanced diffing improves message quality
+   - Custom templates provide flexibility
+
+# Risks and Mitigations  
+1. OpenAI API Reliability
+   - Risk: API rate limits or downtime can affect functionality
+   - Mitigation: Implement retries, fallback mechanisms, and clear error messages
+
+2. Large Repositories
+   - Risk: Performance issues with large diffs
+   - Mitigation: Implement chunking strategies and efficient diff parsing
+
+3. API Key Security
+   - Risk: Exposure of OpenAI API keys
+   - Mitigation: Secure storage in environment variables, clear documentation
+
+4. Message Quality
+   - Risk: Generated messages may not meet user expectations
+   - Mitigation: Implement prompt engineering, customization options, and message editing
+
+5. Git Version Compatibility
+   - Risk: Different Git versions may behave differently
+   - Mitigation: Test with multiple Git versions, implement version detection
+
+# Appendix  
+## Technical Specifications
+1. JavaScript Technologies
+   - Node.js for runtime environment
+   - Commander.js for CLI functionality
+   - Vitest for testing
+   - Prettier for code formatting
+
+2. Git Integration
+   - Git command execution via child_process
+   - Git extension mechanism for custom commands
+
+3. AI Requirements
+   - OpenAI API access
+   - Support for multiple GPT models
+   - Prompt engineering for commit contexts
+
+4. Installation
+   - Global NPM package for easy installation
+   - Post-install Git configuration
+</context>
+<PRD>
+# Technical Architecture  
+## Components
+1. Core Functionality
+   - Main entry point (index.js) with key functions:
+     - getGitSummary(): Gets the git diff summary of staged changes
+     - gptCommit(): Generates a commit message using OpenAI API
+     - gitExtension(): Sets up the CLI commands
+   
+2. Utility Functions
+   - sanitizeCommitMessage.js: Cleans up generated commit messages
+   - Additional utility modules for configuration management
+
+3. Configuration Management
+   - Environment variables (.env file) for the OpenAI API key
+   - Local config file (~/.git-gpt-commit-config.json) for user preferences
+   - Command-line options via Commander.js
+
+4. CLI Interface
+   - Commander.js for command-line argument parsing
+   - Custom Git commands through Git extension mechanism
+
+5. OpenAI Integration
+   - OpenAI API client setup and authentication
+   - Prompt construction for different use cases
+   - Response parsing and formatting
+
+# Development Roadmap  
+## Phase 1: Core Functionality (MVP)
+1. Set up project structure and dependencies
+2. Implement Git diff summary extraction
+3. Develop OpenAI API integration for basic commit message generation
+4. Create CLI commands for commit message generation
+5. Implement configuration storage mechanism
+6. Add basic sanitization for commit messages
+7. Create documentation for basic usage
+
+## Phase 2: Enhanced Features
+1. Support for multiple GPT models and configuration
+2. Add language selection options
+3. Implement commit message formatting options
+4. Add commit prefix/type detection
+5. Enhance error handling and edge cases
+6. Improve performance for large diffs
+7. Add testing for core components
+
+## Phase 3: Advanced Capabilities
+1. Implement smart diffing with context awareness
+2. Add custom prompt template support
+3. Create pre-commit hook integration
+4. Develop batch processing for multiple commits
+5. Add support for commit message editing
+6. Implement offline mode with caching
+7. Add analytics for usage tracking (optional)
+
+# Logical Dependency Chain
+1. Core Git Integration
+   - Git diff extraction must be implemented first as foundation
+   - OpenAI API integration follows to enable basic message generation
+   - Message sanitization ensures quality output
+
+2. User Experience
+   - CLI commands provide the interface for user interaction
+   - Configuration storage enables persistent preferences
+   - Model selection expands capabilities
+
+3. Advanced Features
+   - Language support builds on basic functionality
+   - Advanced diffing improves message quality
+   - Custom templates provide flexibility
+
+# Risks and Mitigations  
+1. OpenAI API Reliability
+   - Risk: API rate limits or downtime can affect functionality
+   - Mitigation: Implement retries, fallback mechanisms, and clear error messages
+
+2. Large Repositories
+   - Risk: Performance issues with large diffs
+   - Mitigation: Implement chunking strategies and efficient diff parsing
+
+3. API Key Security
+   - Risk: Exposure of OpenAI API keys
+   - Mitigation: Secure storage in environment variables, clear documentation
+
+4. Message Quality
+   - Risk: Generated messages may not meet user expectations
+   - Mitigation: Implement prompt engineering, customization options, and message editing
+
+5. Git Version Compatibility
+   - Risk: Different Git versions may behave differently
+   - Mitigation: Test with multiple Git versions, implement version detection
+
+# Appendix  
+## Technical Specifications
+1. JavaScript Technologies
+   - Node.js for runtime environment
+   - Commander.js for CLI functionality
+   - Vitest for testing
+   - Prettier for code formatting
+
+2. Git Integration
+   - Git command execution via child_process
+   - Git extension mechanism for custom commands
+
+3. AI Requirements
+   - OpenAI API access
+   - Support for multiple GPT models
+   - Prompt engineering for commit contexts
+
+4. Installation
+   - Global NPM package for easy installation
+   - Post-install Git configuration
+</PRD> 
