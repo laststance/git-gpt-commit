@@ -11,14 +11,21 @@ import * as gitGptCommit from '../index.js'
 
 describe('Git GPT Commit', () => {
   let tempDir
+  let originalDir
 
   beforeEach(() => {
+    // Store original directory
+    originalDir = process.cwd()
+
     // Set up a new test environment before each test
     tempDir = setupTestRepo()
     vi.clearAllMocks()
   })
 
   afterEach(() => {
+    // Change back to original directory before cleaning up
+    process.chdir(originalDir)
+
     // Clean up the test environment after each test
     cleanupTestRepo(tempDir)
     vi.clearAllMocks()
