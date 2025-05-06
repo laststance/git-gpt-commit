@@ -122,12 +122,11 @@ const gptCommit = async () => {
   }
 }
 
-const gitExtension = (args) => {
+const gitExtension = (_args) => {
   // Load configuration at startup
   loadConfig()
 
-  // Extract the command and arguments from the command line
-  const [command, ...rest] = args
+  // No need to extract command and args since we're using Commander
 
   program
     .command('commit')

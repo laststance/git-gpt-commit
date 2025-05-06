@@ -1,6 +1,3 @@
-import fs from 'fs'
-import path from 'path'
-
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 import * as gitGptCommit from '../index.js'

@@ -10,5 +10,13 @@ module.exports = {
   plugins: [],
   rules: {},
   settings: {},
-  overrides: [],
+  overrides: [
+    {
+      // Disable the no-unused-vars rule for test files
+      files: ['tests/**/*.js', 'utils/**/*.test.js'],
+      rules: {
+        '@typescript-eslint/no-unused-vars': 'off',
+      },
+    },
+  ],
 }
