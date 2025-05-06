@@ -1,5 +1,3 @@
-
-
 A typical .gitignore for an npm module could include the following:
 
 # node_modules
@@ -23,3 +21,21 @@ npm-debug.log*
 
 # env files
 .env
+
+# Added by Claude Task Master
+yarn-debug.log*
+yarn-error.log*
+dev-debug.log
+node_modules/
+# Environment variables
+# Editor directories and files
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+# OS specific
+.DS_Store
+# Task files
+tasks.json
+tasks/ 

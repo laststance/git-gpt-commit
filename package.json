@@ -7,7 +7,7 @@
   "scripts": {
     "prepare": "husky",
     "prettier": "prettier --ignore-unknown --write .",
-    "test": "vitest"
+    "test": "vitest run"
   },
   "repository": {
     "type": "git",
