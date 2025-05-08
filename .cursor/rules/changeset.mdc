@@ -1,0 +1,133 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Versioning & Changesets
+
+This document outlines the versioning strategy and changeset usage for git-gpt-commit.
+
+## Versioning Strategy
+
+The project follows Semantic Versioning (SemVer):
+
+- **Major version (X.0.0)**: Breaking changes that require users to update their code
+- **Minor version (0.X.0)**: New features added in a backward-compatible manner
+- **Patch version (0.0.X)**: Backward-compatible bug fixes
+
+## When to Create a Changeset
+
+Create a changeset when making changes that affect:
+
+- **Public API** - Changes to exported functions or CLI interface
+- **Dependencies** - Adding, removing, or updating dependencies
+- **Configuration** - Changes to configuration file structure
+- **Documentation** - Significant updates to documentation
+
+## Changeset Process
+
+1. Make your code changes and commit them
+2. Run the changeset command:
+   ```bash
+   npm run changeset
+   ```
+3. Follow the interactive prompts:
+   - Select the type of change (patch, minor, major)
+   - Enter a description of the change
+   - The command will create a new markdown file in the `.changeset` directory
+4. Commit the changeset file:
+   ```bash
+   git add .changeset/*.md
+   git commit -m "chore: add changeset for recent changes"
+   ```
+   
+   Or amend your previous commit:
+   ```bash
+   git add .changeset/*.md
+   git commit --amend --no-edit
+   ```
+
+## Writing Good Changeset Messages
+
+A good changeset message should:
+
+- Explain **what** changed
+- Explain **why** it changed
+- Mention any **migration steps** for users (if applicable)
+
+Example:
+
+```md
+---
+"@laststance/git-gpt-commit": minor
+---
+
+Add support for GPT-4 model selection. Users can now choose between different OpenAI models for generating commit messages using the `git gpt model` command.
+```
+
+## Release Process
+
+When ready to release:
+
+1. Run the version command to update package.json and create a CHANGELOG.md:
+   ```bash
+   npm run version
+   ```
+2. Review the generated CHANGELOG.md
+3. Commit the changes:
+   ```bash
+   git add .
+   git commit -m "chore: version release"
+   ```
+4. Create a version tag:
+   ```bash
+   git tag v0.x.x
+   ```
+5. Push changes and tags:
+   ```bash
+   git push origin main --tags
+   ```
+
+## Changeset Types
+
+- **fix**: Bug fixes (patch)
+- **feat**: New features (minor)
+- **chore**: Maintenance changes (typically no version bump)
+- **docs**: Documentation changes (typically no version bump)
+- **BREAKING CHANGE**: Major version bump (include details about migration)
+
+## Examples
+
+### Minor Feature Addition
+
+```md
+---
+"@laststance/git-gpt-commit": minor
+---
+
+Add support for custom language selection. Users can now specify their preferred language for commit messages using `git gpt lang`.
+```
+
+### Bug Fix
+
+```md
+---
+"@laststance/git-gpt-commit": patch
+---
+
+Fix issue where quotes in commit messages were not properly escaped, causing git commit to fail.
+```
+
+### Breaking Change
+
+```md
+---
+"@laststance/git-gpt-commit": major
+---
+
+Change CLI command structure from `git-gpt-commit` to `git gpt`. Users will need to update their command usage.
+```
+
+---
+
+*Always create a changeset for significant changes to ensure proper versioning and documentation.*

@@ -1,0 +1,118 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Task Structure & Organization
+
+This document outlines the structure of tasks in Task Master and how they should be organized.
+
+## Task Format
+
+Tasks in Task Master are defined in the `tasks/tasks.json` file and follow this structure:
+
+```json
+{
+  "tasks": [
+    {
+      "id": 1,
+      "title": "Task Title",
+      "description": "Brief description of what this task accomplishes",
+      "status": "pending",
+      "priority": "high",
+      "dependencies": [],
+      "details": "Implementation details and guidance for this task...",
+      "testStrategy": "Description of how to test this feature...",
+      "subtasks": [
+        {
+          "id": 1,
+          "title": "Subtask Title",
+          "description": "Brief description of this subtask",
+          "status": "pending",
+          "dependencies": [],
+          "details": "Implementation details for this subtask..."
+        }
+      ]
+    }
+  ]
+}
+```
+
+## Field Definitions
+
+### Required Fields
+
+- **id**: Unique numeric identifier for the task
+- **title**: Short, descriptive title (under 50 characters)
+- **description**: Brief summary of what the task accomplishes (1-2 sentences)
+- **status**: Current state of the task (see Status Values section)
+
+### Optional Fields
+
+- **priority**: Importance level ("high", "medium", "low")
+- **dependencies**: Array of task IDs that must be completed before this task
+- **details**: In-depth implementation instructions and guidance
+- **testStrategy**: How to verify the task is complete
+- **subtasks**: Array of nested tasks (follow the same structure)
+
+## Status Values
+
+- **pending**: Not started yet, waiting to be worked on
+- **in-progress**: Currently being worked on
+- **done**: Completed and verified
+- **review**: Implementation complete, awaiting review
+- **deferred**: Postponed to a later time
+- **cancelled**: No longer needed or relevant
+- **blocked**: Cannot proceed due to external factors
+
+## Subtask IDs
+
+Subtask IDs follow a dotted notation format:
+
+- The first number is the parent task ID
+- The second number is the subtask number
+- Examples: "1.1", "1.2", "2.3"
+
+## Task File Organization
+
+When using the `generate` command, Task Master creates individual markdown files for each task in the `tasks/` directory:
+
+```
+tasks/
+├── tasks.json
+├── task-1-initialize-project.md
+├── task-2-implement-feature.md
+└── ...
+```
+
+## Task Relationships
+
+Tasks can have dependencies on other tasks:
+
+- A task cannot start until all its dependencies are marked as "done"
+- Dependencies are listed by ID in the `dependencies` array
+- Dependencies can include both task IDs and subtask IDs
+
+## Best Practices
+
+- **Keep task titles clear and concise**: Aim for 3-7 words that describe the outcome
+- **Write actionable descriptions**: Start with verbs (Implement, Create, Fix, etc.)
+- **Set realistic dependencies**: Only include true blockers as dependencies
+- **Prioritize appropriately**: High priority should be reserved for critical path items
+- **Update statuses promptly**: Keep the task board reflecting the current state
+- **Break down complex tasks**: Use subtasks for tasks that seem too large
+- **Include specific details**: Add code examples, file paths, and implementation notes
+- **Define test strategies**: Include how to verify the task is complete
+
+## Task Visualization
+
+Task Master visualizes dependencies in task listings with status indicators:
+
+- ✅ Complete dependencies (status: "done")
+- ⏱️ Pending dependencies (other statuses)
+
+This helps quickly identify which prerequisite tasks are blocking work.
+
+---
+
+*For more information on managing tasks, see the [Development Workflow Guide](mdc:.cursor/rules/dev_workflow.mdc)*

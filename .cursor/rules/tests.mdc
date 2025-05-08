@@ -1,0 +1,119 @@
+---
+description:
+globs:
+alwaysApply: false
+---
+# Testing Guidelines
+
+This document outlines the testing approach and best practices for the git-gpt-commit project.
+
+## Testing Stack
+
+The project uses the following testing tools:
+
+- **Vitest**: Modern, fast testing framework compatible with Jest
+- **@vitest/ui**: Visual interface for test results and coverage
+- **@vitest/coverage-v8**: Code coverage reporting
+
+## Test File Organization
+
+- Test files should be placed alongside the files they test with a `.test.js` suffix
+- Utility test helpers can be placed in the `tests/utils/` directory
+- Fixtures and sample data should be placed in the `fixtures/` directory
+
+## Test Command
+
+Run tests using:
+
+```bash
+pnpm test
+```
+
+For interactive testing interface:
+
+```bash
+pnpm exec vitest --ui
+```
+
+## Testing Patterns
+
+### Unit Tests
+
+- Focus on testing individual functions in isolation
+- Mock external dependencies (OpenAI API, Git commands, file system)
+- Example from [sanitizeCommitMessage.test.js](mdc:utils/sanitizeCommitMessage.test.js):
+
+```javascript
+// ✅ DO: Test individual functions with clear input/output expectations
+test('removes quotes from the beginning and end', () => {
+  expect(sanitizeCommitMessage('"Fix bug"')).toBe('Fix bug');
+  expect(sanitizeCommitMessage("'Update README'")).toBe('Update README');
+});
+```
+
+### Integration Tests
+
+- Test the interaction between multiple components
+- Example of testing the CLI command execution:
+
+```javascript
+// ✅ DO: Test integrated functionality with mocked external dependencies
+test('gptCommit executes git commit with correct message', async () => {
+  // Mock getGitSummary to return a fixed value
+  vi.spyOn(utils, 'getGitSummary').mockResolvedValue('Added new feature');
+  
+  // Mock OpenAI response
+  vi.spyOn(openai.chat.completions, 'create').mockResolvedValue({
+    choices: [{ message: { content: 'feat: add new feature' } }]
+  });
+  
+  // Mock execSync to capture the git command
+  const execSyncMock = vi.spyOn(childProcess, 'execSync').mockImplementation();
+  
+  // Mock prompts to auto-confirm
+  vi.spyOn(prompts, 'prompt').mockResolvedValue({ value: true });
+  
+  await gptCommit();
+  
+  // Verify the git command was called with the correct message
+  expect(execSyncMock).toHaveBeenCalledWith('git commit -m "feat: add new feature"');
+});
+```
+
+### Test Coverage
+
+- Aim for high test coverage of core functionality
+- Prioritize testing edge cases and error handling
+- Run coverage reports with `pnpm test -- --coverage`
+
+## Testing Strategies for Different Components
+
+### OpenAI Integration
+
+- Mock API responses for predictable testing
+- Test error handling for API failures
+- Verify the correct model and parameters are used
+
+### Git Command Integration
+
+- Mock execSync and exec for git commands
+- Test handling of different git states (no changes, etc.)
+- Verify correct git commands are executed
+
+### Configuration Management
+
+- Test loading and saving configuration
+- Test fallback to defaults when configuration doesn't exist
+- Verify configuration persistence
+
+## Best Practices
+
+- **Test one thing per test**: Each test should verify a single behavior
+- **Use descriptive test names**: Clearly describe what is being tested
+- **Arrange-Act-Assert pattern**: Set up, perform action, verify results
+- **Mock external dependencies**: Don't make actual API calls in tests
+- **Avoid test interdependence**: Tests should not depend on other tests
+
+---
+
+*When marking a task as complete, ensure all tests pass and the functionality meets the requirements specified in the task.*
