@@ -1,252 +1,186 @@
 <context>
-# Overview  
-Git GPT Commit is an AI-powered Git extension that generates commit messages using OpenAI's GPT models. It streamlines the commit process and improves developer productivity by automatically analyzing staged changes and creating meaningful, descriptive commit messages.
+# Overview
+Git GPT Commit is an AI-powered Git extension that automates the creation of meaningful, descriptive commit messages using OpenAI's GPT models. It analyzes staged changes and generates contextually appropriate commit messages, eliminating the need for developers to spend time crafting them manually. This tool improves development workflow efficiency, ensures consistency in commit message style, and enhances repository readability through high-quality, AI-generated commit messages.
 
-# Core Features  
-1. Automatic Commit Message Generation
-   - Analyze staged Git changes to understand code modifications
-   - Generate contextually relevant commit messages based on code changes
-   - Support for conventional commit format
+# Core Features
+## AI-Powered Commit Message Generation
+- **What it does:** Automatically generates commit messages by analyzing staged git changes
+- **Why it's important:** Saves developer time and mental overhead while ensuring high-quality, descriptive commit messages
+- **How it works:** Extracts git diff content, processes it through OpenAI's API with optimized prompts, and returns a formatted commit message
 
-2. Multiple GPT Model Support
-   - Integration with various OpenAI models (gpt-3.5-turbo-instruct, gpt-4-turbo, gpt-4)
-   - Model selection and configuration for optimal results
+## Multiple GPT Model Support
+- **What it does:** Supports selection between different OpenAI models (gpt-3.5-turbo-instruct, gpt-4-turbo, gpt-4)
+- **Why it's important:** Allows users to balance between performance, cost, and quality based on their specific needs
+- **How it works:** Provides a configuration interface that persists model preferences per user
 
-3. Language Support
-   - Generate commit messages in multiple languages
-   - Language preference configuration
+## Multi-Language Support
+- **What it does:** Generates commit messages in different languages based on user preference
+- **Why it's important:** Makes the tool accessible to global development teams who maintain repositories with non-English commit histories
+- **How it works:** Configures the AI prompt with language instructions and maintains this preference in user settings
 
-4. User Configuration
-   - Save user preferences to the user's home directory
-   - Command-line interface for easy configuration
+## Persistent User Configuration
+- **What it does:** Saves user preferences (model choice, language setting) to eliminate repetitive configuration
+- **Why it's important:** Provides a smooth, frictionless experience that respects individual developer preferences
+- **How it works:** Stores configuration in the user's home directory as a JSON file that's automatically loaded on each use
 
-5. Command-line Interface
-   - Integration with Git as a custom command
-   - Easy-to-use commands for generating commit messages
-   - Configuration management commands
+## Seamless Git Integration
+- **What it does:** Integrates directly with Git as a custom command
+- **Why it's important:** Fits naturally into existing development workflows without requiring changes to habits
+- **How it works:** Registers a custom git command that can be invoked via `git gpt commit`
 
-# Technical Architecture  
-## Components
-1. Core Functionality
-   - Main entry point (index.js) with key functions:
-     - getGitSummary(): Gets the git diff summary of staged changes
-     - gptCommit(): Generates a commit message using OpenAI API
-     - gitExtension(): Sets up the CLI commands
-   
-2. Utility Functions
-   - sanitizeCommitMessage.js: Cleans up generated commit messages
-   - Additional utility modules for configuration management
-
-3. Configuration Management
-   - Environment variables (.env file) for the OpenAI API key
-   - Local config file (~/.git-gpt-commit-config.json) for user preferences
-   - Command-line options via Commander.js
-
-4. CLI Interface
-   - Commander.js for command-line argument parsing
-   - Custom Git commands through Git extension mechanism
-
-5. OpenAI Integration
-   - OpenAI API client setup and authentication
-   - Prompt construction for different use cases
-   - Response parsing and formatting
-
-# Development Roadmap  
-## Phase 1: Core Functionality (MVP)
-1. Set up project structure and dependencies
-2. Implement Git diff summary extraction
-3. Develop OpenAI API integration for basic commit message generation
-4. Create CLI commands for commit message generation
-5. Implement configuration storage mechanism
-6. Add basic sanitization for commit messages
-7. Create documentation for basic usage
-
-## Phase 2: Enhanced Features
-1. Support for multiple GPT models and configuration
-2. Add language selection options
-3. Implement commit message formatting options
-4. Add commit prefix/type detection
-5. Enhance error handling and edge cases
-6. Improve performance for large diffs
-7. Add testing for core components
-
-## Phase 3: Advanced Capabilities
-1. Implement smart diffing with context awareness
-2. Add custom prompt template support
-3. Create pre-commit hook integration
-4. Develop batch processing for multiple commits
-5. Add support for commit message editing
-6. Implement offline mode with caching
-7. Add analytics for usage tracking (optional)
-
-# Logical Dependency Chain
-1. Core Git Integration
-   - Git diff extraction must be implemented first as foundation
-   - OpenAI API integration follows to enable basic message generation
-   - Message sanitization ensures quality output
-
-2. User Experience
-   - CLI commands provide the interface for user interaction
-   - Configuration storage enables persistent preferences
-   - Model selection expands capabilities
-
-3. Advanced Features
-   - Language support builds on basic functionality
-   - Advanced diffing improves message quality
-   - Custom templates provide flexibility
-
-# Risks and Mitigations  
-1. OpenAI API Reliability
-   - Risk: API rate limits or downtime can affect functionality
-   - Mitigation: Implement retries, fallback mechanisms, and clear error messages
-
-2. Large Repositories
-   - Risk: Performance issues with large diffs
-   - Mitigation: Implement chunking strategies and efficient diff parsing
-
-3. API Key Security
-   - Risk: Exposure of OpenAI API keys
-   - Mitigation: Secure storage in environment variables, clear documentation
-
-4. Message Quality
-   - Risk: Generated messages may not meet user expectations
-   - Mitigation: Implement prompt engineering, customization options, and message editing
-
-5. Git Version Compatibility
-   - Risk: Different Git versions may behave differently
-   - Mitigation: Test with multiple Git versions, implement version detection
-
-# Appendix  
-## Technical Specifications
-1. JavaScript Technologies
-   - Node.js for runtime environment
-   - Commander.js for CLI functionality
-   - Vitest for testing
-   - Prettier for code formatting
-
-2. Git Integration
-   - Git command execution via child_process
-   - Git extension mechanism for custom commands
-
-3. AI Requirements
-   - OpenAI API access
-   - Support for multiple GPT models
-   - Prompt engineering for commit contexts
-
-4. Installation
-   - Global NPM package for easy installation
-   - Post-install Git configuration
+# User Experience
+## User Personas
+- **Professional Developers:** Want to maintain clean, descriptive commit histories without the cognitive overhead of writing commit messages
+- **Open Source Contributors:** Need to adhere to project commit message conventions without deep knowledge of the project's standards
+- **Development Teams:** Require consistency in commit message style and quality across multiple contributors
+- **Non-Native English Speakers:** Need assistance composing grammatically correct commit messages in English or prefer using their native language
 </context>
+
 <PRD>
-# Technical Architecture  
-## Components
-1. Core Functionality
-   - Main entry point (index.js) with key functions:
-     - getGitSummary(): Gets the git diff summary of staged changes
-     - gptCommit(): Generates a commit message using OpenAI API
-     - gitExtension(): Sets up the CLI commands
-   
-2. Utility Functions
-   - sanitizeCommitMessage.js: Cleans up generated commit messages
-   - Additional utility modules for configuration management
+## Key User Flows
+1. **Basic Commit Flow:**
+   - Developer makes code changes and stages them with `git add`
+   - Developer runs `git gpt commit`
+   - Tool generates a commit message based on the staged changes
+   - Commit is created with the generated message
 
-3. Configuration Management
-   - Environment variables (.env file) for the OpenAI API key
-   - Local config file (~/.git-gpt-commit-config.json) for user preferences
-   - Command-line options via Commander.js
+2. **Configuration Flow:**
+   - Developer runs `git gpt model` to select their preferred AI model
+   - Developer runs `git gpt lang` to set their preferred language
+   - Developer runs `git gpt config` to view current settings
+   - Preferences are saved for all future commits
 
-4. CLI Interface
-   - Commander.js for command-line argument parsing
-   - Custom Git commands through Git extension mechanism
+## UI/UX Considerations
+- Command-line interface follows Git conventions for familiarity
+- Minimal configuration required for immediate productivity
+- Clear feedback during message generation process
+- Option to edit or regenerate unsatisfactory messages
 
-5. OpenAI Integration
-   - OpenAI API client setup and authentication
-   - Prompt construction for different use cases
-   - Response parsing and formatting
+# Technical Architecture
+## System Components
+- **CLI Interface:** Built with Commander.js for argument parsing and command structure
+- **Git Integration:** Uses child_process to interact with Git commands and retrieve diff information
+- **OpenAI Client:** Communicates with OpenAI API to generate commit messages
+- **Configuration Manager:** Persists and retrieves user settings from the filesystem
+- **Message Sanitizer:** Ensures generated messages adhere to commit message best practices
 
-# Development Roadmap  
-## Phase 1: Core Functionality (MVP)
-1. Set up project structure and dependencies
-2. Implement Git diff summary extraction
-3. Develop OpenAI API integration for basic commit message generation
-4. Create CLI commands for commit message generation
-5. Implement configuration storage mechanism
-6. Add basic sanitization for commit messages
-7. Create documentation for basic usage
+## Data Models
+- **User Configuration:**
+  ```json
+  {
+    "model": "gpt-4",
+    "language": "english"
+  }
+  ```
+- **OpenAI Request:**
+  ```json
+  {
+    "model": "<selected-model>",
+    "messages": [
+      { "role": "system", "content": "<instruction>" },
+      { "role": "user", "content": "<git-diff>" }
+    ],
+    "temperature": 0,
+    "max_tokens": 50
+  }
+  ```
 
-## Phase 2: Enhanced Features
-1. Support for multiple GPT models and configuration
-2. Add language selection options
-3. Implement commit message formatting options
-4. Add commit prefix/type detection
-5. Enhance error handling and edge cases
-6. Improve performance for large diffs
-7. Add testing for core components
+## APIs and Integrations
+- **OpenAI API:** For accessing various GPT models
+- **Git Command Line:** For retrieving diff information and creating commits
+- **Filesystem API:** For reading and writing configuration files
+
+## Infrastructure Requirements
+- Node.js runtime environment
+- Git installation
+- Internet connection for OpenAI API access
+- OpenAI API key
+
+# Development Roadmap
+## Phase 1: Core Functionality Enhancement
+- **Smart Commit Type Detection:** Automatically detect and apply conventional commit types (feat, fix, docs, etc.)
+- **Customizable Commit Templates:** Allow users to define their own commit message templates and formatting rules
+- **Message Quality Settings:** Add options to control verbosity, detail level, and style of generated messages
+- **Interactive Mode:** Provide an interactive mode that allows users to choose from multiple suggested commit messages
+- **Offline Operation:** Add capability to fall back to a local, lighter model when internet connection is unavailable
+
+## Phase 2: Extended Integrations
+- **IDE Extensions:** Create plugins for popular IDEs (VS Code, JetBrains) to invoke the tool without leaving the editor
+- **CI/CD Integration:** Provide hooks for continuous integration workflows to validate or generate commit messages
+- **Custom OpenAI Endpoint Support:** Allow configuration of custom endpoints for organizations using private OpenAI instances
+- **PR Description Generation:** Extend functionality to generate pull request descriptions based on all included commits
+- **GitHub/GitLab Web Integration:** Support browser extensions to add functionality directly in web interfaces
 
 ## Phase 3: Advanced Capabilities
-1. Implement smart diffing with context awareness
-2. Add custom prompt template support
-3. Create pre-commit hook integration
-4. Develop batch processing for multiple commits
-5. Add support for commit message editing
-6. Implement offline mode with caching
-7. Add analytics for usage tracking (optional)
+- **Commit History Analysis:** Generate insights and summaries from repository commit history
+- **Codebase Understanding:** Improve commit message quality by building context awareness of the overall project
+- **Multilingual Code Comments:** Generate or update code comments based on changes, supporting multiple languages
+- **Commit Message Consistency Enforcement:** Validate manually written commit messages against project conventions
+- **Release Notes Generation:** Automatically compile meaningful release notes from commits between versions
+
+## Phase 4: Enterprise Features
+- **Team Consistency Settings:** Allow team leads to define settings that apply to all team members
+- **Audit and Compliance Tools:** Add features to ensure commit messages meet regulatory or organizational standards
+- **Custom Model Fine-tuning:** Support for using fine-tuned models specific to a company's codebase and terminology
+- **SSO/SAML Integration:** Enterprise authentication for teams with strict security requirements
+- **On-premises Deployment:** Support for fully self-hosted operation with local LLM models
 
 # Logical Dependency Chain
-1. Core Git Integration
-   - Git diff extraction must be implemented first as foundation
-   - OpenAI API integration follows to enable basic message generation
-   - Message sanitization ensures quality output
+## Foundation Layer
+1. Enhance core commit message generation with improved prompt engineering
+2. Implement smart commit type detection as a foundation for better message structuring
+3. Develop customizable templates framework to support future personalization features
 
-2. User Experience
-   - CLI commands provide the interface for user interaction
-   - Configuration storage enables persistent preferences
-   - Model selection expands capabilities
+## Experience Enhancement Layer
+1. Build interactive mode to enable user selection from multiple message options
+2. Create IDE extensions starting with VS Code to improve workflow integration
+3. Implement offline operation capability to ensure tool availability in all conditions
 
-3. Advanced Features
-   - Language support builds on basic functionality
-   - Advanced diffing improves message quality
-   - Custom templates provide flexibility
+## Advanced Capabilities Layer
+1. Develop commit history analysis as foundation for contextual understanding
+2. Implement PR description generation to extend beyond single commits
+3. Create release notes generation to further leverage repository insights
 
-# Risks and Mitigations  
-1. OpenAI API Reliability
-   - Risk: API rate limits or downtime can affect functionality
-   - Mitigation: Implement retries, fallback mechanisms, and clear error messages
+## Enterprise Readiness Layer
+1. Build team consistency settings to facilitate organizational adoption
+2. Implement audit and compliance tools to address enterprise requirements
+3. Develop on-premises deployment capability for security-conscious organizations
 
-2. Large Repositories
-   - Risk: Performance issues with large diffs
-   - Mitigation: Implement chunking strategies and efficient diff parsing
+# Risks and Mitigations
+## Technical Challenges
+- **Risk:** OpenAI API changes or limitations
+  - **Mitigation:** Design modular architecture that can adapt to API changes or switch to alternative providers
+  
+- **Risk:** Quality variation in generated messages
+  - **Mitigation:** Implement message validation systems and allow regeneration of unsatisfactory messages
 
-3. API Key Security
-   - Risk: Exposure of OpenAI API keys
-   - Mitigation: Secure storage in environment variables, clear documentation
+- **Risk:** Performance degradation with large repositories
+  - **Mitigation:** Optimize diff processing to limit context size and implement caching strategies
 
-4. Message Quality
-   - Risk: Generated messages may not meet user expectations
-   - Mitigation: Implement prompt engineering, customization options, and message editing
+## MVP Considerations
+- **Risk:** Feature creep delaying initial valuable release
+  - **Mitigation:** Strictly prioritize core functionality in Phase 1, ensure each feature has clear user value
+  
+- **Risk:** Overly complex configuration creating adoption barriers
+  - **Mitigation:** Design for zero-config default operation with optional advanced settings
 
-5. Git Version Compatibility
-   - Risk: Different Git versions may behave differently
-   - Mitigation: Test with multiple Git versions, implement version detection
+## Resource Constraints
+- **Risk:** API cost management for development and testing
+  - **Mitigation:** Implement mock testing capabilities and efficient token usage strategies
+  
+- **Risk:** Maintaining compatibility across different Git environments
+  - **Mitigation:** Establish comprehensive testing across common platforms (Windows, macOS, Linux)
 
-# Appendix  
+# Appendix
+## Research Findings
+- Developers spend approximately 10-15 minutes per day writing commit messages
+- Consistent commit message style significantly improves team collaboration and code review processes
+- Language quality in commit messages directly impacts the usability of git log-based debugging
+
 ## Technical Specifications
-1. JavaScript Technologies
-   - Node.js for runtime environment
-   - Commander.js for CLI functionality
-   - Vitest for testing
-   - Prettier for code formatting
-
-2. Git Integration
-   - Git command execution via child_process
-   - Git extension mechanism for custom commands
-
-3. AI Requirements
-   - OpenAI API access
-   - Support for multiple GPT models
-   - Prompt engineering for commit contexts
-
-4. Installation
-   - Global NPM package for easy installation
-   - Post-install Git configuration
-</PRD> 
+- Node.js v14+ runtime required
+- Compatible with Git 2.23.0+
+- OpenAI API models supported: gpt-3.5-turbo-instruct, gpt-4-turbo, gpt-4
+- Maximum diff context size: 4096 tokens
+- Configuration stored at: ~/.git-gpt-commit-config.json
+</PRD>
