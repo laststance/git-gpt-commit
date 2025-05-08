@@ -245,6 +245,7 @@ const gitExtension = (_args) => {
       )
       console.log(`   model: ${model}`)
       console.log(`    lang: ${language}`)
+      console.log(`    path: ${CONFIG_FILE}`)
     })
 
   // Handle invalid commands
