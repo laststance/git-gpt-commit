@@ -22,7 +22,7 @@ git gpt open-api-key
 
 Select "Add or update API key" from the menu and enter your API key when prompted. Your key will be securely stored in your user configuration.
 
-- **Step3:** commit your changes with AI
+- **Step3:** commit your changes with `git gpt commit`
 
 ```bash
 git add --all
@@ -30,26 +30,6 @@ git gpt commit // generate commit message with AI
 ```
 
 ✅ You've completed all setup!
-
-## Usage
-
-After setting up the project, you can use the Git extension in any Git repository:
-
-### Generate Commit Message
-
-Stage your changes:
-
-```bash
-git add --all
-```
-
-Generate a commit message:
-
-```bash
-git gpt commit
-```
-
-The extension will analyze your staged changes and generate a commit message using OpenAI's model. You'll be prompted to confirm the message before it's committed.
 
 ### Available Commands
 
