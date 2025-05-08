@@ -1,6 +1,3 @@
-> Original package doesn't work due to config mistake 'package.json'. https://github.com/nooqta/git-commit-gpt  
-> Therefore I fix it and republish as a '@laststance/git-gpt-commit'.
-
 <div align="center">
     <h1>Git GPT Commit</h1>
     <p>An AI-powered Git extension that generates commit messages using OpenAI's GPT-4o, streamlining the commit process and improving developer productivity.</p>
@@ -17,33 +14,19 @@ There are two ways to install the Git extension: using npm or manual installatio
 npm install -g @laststance/git-gpt-commit
 ```
 
-- **Step2:** move to any language your project root
+- **Step2:** add your OpenAI API key using the `git gpt open-api-key`
 
 ```bash
-cd my-rust-project
+git gpt open-api-key
 ```
 
-- **Step3:** add `.env` file to `.gitignore`
+Select "Add or update API key" from the menu and enter your API key when prompted. Your key will be securely stored in your user configuration.
+
+- **Step3:** commit your changes with AI
 
 ```bash
-echo -e "\n.env" >> .gitignore
-```
-
-- **Step4:** commit .gitignore
-
-```bash
-git add .
-git commit -m 'add .env to .gitignore'
-```
-
-> ❗️Step3 and 4 must be done for prevent leak your OpenAI API key on Github/GitLab.
-
-- **Step5:** Get your openai API key from [openai](https://platform.openai.com/account/api-keys) and add `.env` file to `OPENAI_API_KEY`.
-
-`.env`
-
-```
-OPENAI_API_KEY=your_openai_api_key
+git add --all
+git gpt commit // generate commit message with AI
 ```
 
 ✅ You've completed all setup!
@@ -52,21 +35,78 @@ OPENAI_API_KEY=your_openai_api_key
 
 After setting up the project, you can use the Git extension in any Git repository:
 
+### Generate Commit Message
+
 Stage your changes:
 
-```
-git add .
+```bash
+git add --all
 ```
 
-Run the Git extension:
+Generate a commit message:
 
-```
+```bash
 git gpt commit
 ```
 
-The script will summarize the Git changes since the last commit and generate a commit message using OpenAI's model. You will be prompted to confirm whether to use the suggested message or cancel the commit.
+The extension will analyze your staged changes and generate a commit message using OpenAI's model. You'll be prompted to confirm the message before it's committed.
+
+### Available Commands
+
+- **Commit with AI-generated message**
+
+  ```bash
+  git gpt commit
+  ```
+
+  Generates a commit message based on your staged changes.
+
+- **Select AI Model**
+
+  ```bash
+  git gpt model
+  ```
+
+  Choose from available models (gpt-4o, gpt-3.5-turbo-instruct, gpt-4-turbo, gpt-4).
+
+- **Change Commit Message Language**
+
+  ```bash
+  git gpt lang
+  ```
+
+  Select the language for commit messages (English, Spanish, Japanese, French, German, Italian, Korean, Chinese, Dutch, Russian, Portuguese).
+
+- **Toggle Commit Prefix**
+
+  ```bash
+  git gpt prefix
+  ```
+
+  Enable/disable conventional commit prefixes (feat:, fix:, chore:, etc.).
+
+- **Manage OpenAI API Key**
+
+  ```bash
+  git gpt open-api-key
+  ```
+
+  Add, update, display, or delete your stored OpenAI API key.
+
+- **Show Current Configuration**
+  ```bash
+  git gpt config
+  ```
+  Display your current settings (model, language, prefix status, API key).
+
+### Configuration
+
+Your settings are stored in `~/.git-gpt-commit-config.json` and automatically loaded when you use the extension. You can manage your configuration through the commands above or directly edit this file.
 
 ## Credits
+
+> Original package doesn't work due to config mistake 'package.json'. https://github.com/nooqta/git-commit-gpt  
+> Therefore I fix it and added some features as a '@laststance/git-gpt-commit'.
 
 Thanks to
 
