@@ -17,7 +17,7 @@ let model = 'gpt-4o' // Default model
 let language = 'English' // Default language
 // Define prefixState using closure for safer state management
 const prefixState = (() => {
-  let enabled = false // Default is disabled
+  let enabled = true // Default is enabled
   return {
     isEnabled: () => enabled,
     setEnabled: (value) => {
@@ -26,6 +26,7 @@ const prefixState = (() => {
     },
   }
 })()
+
 const CONFIG_FILE = path.join(os.homedir(), '.git-gpt-commit-config.json')
 
 // Function to save config to file
@@ -106,7 +107,7 @@ const gptCommit = async () => {
     {
       role: 'user',
       content: prefixState.isEnabled()
-        ? `Generate a Git commit message based on the following summary, with an appropriate prefix (add:, fix:, feat:, refactor:, chore:, perf:, test:, style:, docs:, merge:, chore:, build:, ci:, revert:, merge:) based on the type of changes: ${gitSummary}\n\nCommit message: `
+        ? `Generate a Git commit message based on the following summary, with an appropriate prefix (add:, fix:, feat:, refactor:, chore:, perf:, test:, style:, docs:, merge:, build:, ci:, revert:, merge:) based on the type of changes: ${gitSummary}\n\nCommit message: `
         : `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `,
     },
   ]
@@ -219,7 +220,7 @@ const gitExtension = (_args) => {
       const response = await prompts({
         type: 'select',
         name: 'value',
-        message: 'Set commit message prefixes',
+        message: 'Set commit message prefixes (e.g., fix:, feat:, refactor:)',
         choices: [
           { title: 'Enable prefixes', value: true },
           { title: 'Disable prefixes', value: false },
@@ -231,7 +232,7 @@ const gitExtension = (_args) => {
       const newValue = prefixState.setEnabled(response.value)
       saveConfig({ prefixEnabled: newValue })
       console.log(
-        `Prefixes ${newValue ? 'enabled' : 'disabled'} and saved to configuration`,
+        `Prefix ${newValue ? 'enabled' : 'disabled'} and saved to configuration`,
       )
     })
 
@@ -239,11 +240,11 @@ const gitExtension = (_args) => {
     .command('config')
     .description('Show current configuration')
     .action(() => {
-      console.log(`Current model: ${model}`)
-      console.log(`Current language: ${language}`)
       console.log(
-        `Prefixes: ${prefixState.isEnabled() ? 'enabled' : 'disabled'}`,
+        `  prefix: ${prefixState.isEnabled() ? 'enabled' : 'disabled'}`,
       )
+      console.log(`   model: ${model}`)
+      console.log(`    lang: ${language}`)
     })
 
   // Handle invalid commands
