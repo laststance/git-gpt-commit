@@ -20,7 +20,7 @@ npm install -g @laststance/git-gpt-commit
 git gpt open-api-key
 ```
 
-Select "Add or update API key" from the menu and enter your API key when prompted. Your key will be securely stored in your user configuration.
+Select `Add or update API key` from the menu and enter your API key when prompted. Your key will be securely stored in your user configuration.
 
 - **Step3:** commit your changes with `git gpt commit`
 
