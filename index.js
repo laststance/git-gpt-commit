@@ -15,6 +15,7 @@ import { sanitizeCommitMessage } from './utils/sanitizeCommitMessage.js'
 let openai
 let model = 'gpt-4o' // Default model
 let language = 'English' // Default language
+let apiKey = null // Store API key from config
 // Define prefixState using closure for safer state management
 const prefixState = (() => {
   let enabled = true // Default is enabled
@@ -59,6 +60,9 @@ function loadConfig() {
       if (config.prefixEnabled !== undefined) {
         prefixState.setEnabled(config.prefixEnabled)
       }
+      if (config.apiKey) {
+        apiKey = config.apiKey
+      }
     }
   } catch (error) {
     console.error('Error loading configuration:', error)
@@ -66,12 +70,33 @@ function loadConfig() {
   }
 }
 
+// Mask API key for display
+function maskApiKey(key) {
+  if (!key) return 'none'
+  // Show only first 4 and last 4 characters
+  return `${key.substring(0, 4)}...${key.substring(key.length - 4)}`
+}
+
 export async function getGitSummary() {
   try {
-    const dotenv = await import('dotenv')
-    const envPath = path.join(process.cwd(), '.env')
-    dotenv.config({ path: envPath })
-    openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
+    // If no API key in config, try to load from .env
+    if (!apiKey) {
+      const dotenv = await import('dotenv')
+      const envPath = path.join(process.cwd(), '.env')
+      dotenv.config({ path: envPath })
+    }
+
+    // Use API key from config if available, otherwise use from .env
+    const openaiApiKey = apiKey || process.env.OPENAI_API_KEY
+
+    if (!openaiApiKey) {
+      console.error(
+        'No OpenAI API key found. Please set it using "git gpt open-api-key add".',
+      )
+      process.exit(1)
+    }
+
+    openai = new OpenAI({ apiKey: openaiApiKey })
 
     const exec = promisify(originalExec)
     const { stdout } = await exec(
@@ -237,6 +262,80 @@ const gitExtension = (_args) => {
     })
 
   program
+    .command('open-api-key')
+    .description('Manage your OpenAI API key')
+    .action(async () => {
+      // Show select menu for actions
+      const actionResponse = await prompts({
+        type: 'select',
+        name: 'value',
+        message: 'What would you like to do with your OpenAI API key?',
+        choices: [
+          { title: 'Add or update API key', value: 'add' },
+          { title: 'Show API key (masked)', value: 'show' },
+          { title: 'Delete API key', value: 'delete' },
+        ],
+        initial: 0,
+      })
+
+      // If user cancelled the selection
+      if (!actionResponse.value) {
+        console.log('Action cancelled.')
+        return
+      }
+
+      const action = actionResponse.value
+
+      switch (action) {
+        case 'add':
+          const response = await prompts({
+            type: 'password',
+            name: 'value',
+            message: 'Enter your OpenAI API key',
+          })
+
+          if (response.value) {
+            saveConfig({ apiKey: response.value })
+            apiKey = response.value
+            console.log('API key saved to configuration.')
+          } else {
+            console.log('Action cancelled.')
+          }
+          break
+
+        case 'delete':
+          const confirmDelete = await prompts({
+            type: 'confirm',
+            name: 'value',
+            message: 'Are you sure you want to delete your stored API key?',
+            initial: false,
+          })
+
+          if (confirmDelete.value) {
+            // Load current config, delete apiKey, and save back
+            let existingConfig = {}
+            if (fs.existsSync(CONFIG_FILE)) {
+              existingConfig = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'))
+              delete existingConfig.apiKey
+              fs.writeFileSync(
+                CONFIG_FILE,
+                JSON.stringify(existingConfig, null, 2),
+              )
+              apiKey = null
+              console.log('API key deleted from configuration.')
+            }
+          } else {
+            console.log('Action cancelled.')
+          }
+          break
+
+        case 'show':
+          console.log(`OpenAI API key: ${maskApiKey(apiKey)}`)
+          break
+      }
+    })
+
+  program
     .command('config')
     .description('Show current configuration')
     .action(() => {
@@ -245,6 +344,7 @@ const gitExtension = (_args) => {
       )
       console.log(`   model: ${model}`)
       console.log(`    lang: ${language}`)
+      console.log(`  apikey: ${maskApiKey(apiKey)}`)
       console.log(`    path: ${CONFIG_FILE}`)
     })
 
