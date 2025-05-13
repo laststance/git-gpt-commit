@@ -1,8 +1,22 @@
-<div align="center">
-    <h1>Git GPT Commit</h1>
-    <p>An AI-powered Git extension that generates commit messages using OpenAI's GPT-4o, streamlining the commit process and improving developer productivity.</p>
-    <img src="./assets/preview.gif" />
-</div>
+<h1 align="center">
+    Git GPT Commit
+</h1>
+
+<br>
+
+
+<p align="center">
+    <code>An AI-powered Git extension</code> that generates commit messages using OpenAI's GPT-4o,  
+    streamlining the commit process and improving developer productivity.
+</p>
+
+<br>
+
+<p align="center">
+  <img src="./assets/cover_image1540x1000.png" alt="cover_image"/>
+</p>
+
+<br>
 
 ## Installation
 
@@ -32,6 +46,10 @@ Select `Add or update API key` from the menu and enter your API key when prompte
 git add --all
 git gpt commit // generate commit message with AI
 ```
+
+<p align="center">
+    <img src="./assets/preview.gif" />
+</p>
 
 ✅ You've completed all setup!
 
