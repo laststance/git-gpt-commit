@@ -18,6 +18,9 @@
 
 <br>
 
+📺 [Demo Video](https://www.youtube.com/watch?v=-0iVFHxXawo)
+📖 [v0.9.0 Release Post](https://dev.to/malloc007/ive-just-released-git-gpt-commit-v090-13of)
+
 ## Installation
 
 There are two ways to install the Git extension: using npm or manual installation.
