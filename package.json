@@ -27,7 +27,7 @@
   },
   "homepage": "https://github.com/laststance/git-commit-gpt#readme",
   "dependencies": {
-    "commander": "^10.0.0",
+    "commander": "^14.0.0",
     "dotenv": "^16.0.3",
     "openai": "^4.26.0",
     "prompts": "^2.4.2"
