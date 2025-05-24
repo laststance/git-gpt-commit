@@ -188,10 +188,11 @@ const gitExtension = (_args) => {
         name: 'value',
         message: 'Select a model',
         choices: [
+          { title: 'gpt-4o-mini (Recommended)', value: 'gpt-4o-mini' },
           { title: 'gpt-4o', value: 'gpt-4o' },
-          { title: 'gpt-3.5-turbo-instruct', value: 'gpt-3.5-turbo-instruct' },
-          { title: 'gpt-4-turbo', value: 'gpt-4-turbo' },
-          { title: 'gpt-4', value: 'gpt-4' }, // New model added
+          { title: 'gpt-4.1-nano (Latest Fast)', value: 'gpt-4.1-nano' },
+          { title: 'gpt-4.1-mini (Latest)', value: 'gpt-4.1-mini' },
+          { title: 'gpt-3.5-turbo (Legacy)', value: 'gpt-3.5-turbo' },
         ],
         initial: 0,
       })
