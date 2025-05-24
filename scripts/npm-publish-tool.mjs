@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 
-import fs from 'fs'
 import { execSync } from 'child_process'
+import fs from 'fs'
 
 /**
  * Script to create a release commit for npm-publish-tool

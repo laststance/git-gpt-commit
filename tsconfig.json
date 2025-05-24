@@ -25,6 +25,7 @@
     "fixtures/**/*.js",
     "tests/**/*.js",
     "utils/**/*.js",
-    "utils/**/*.test.js"
+    "utils/**/*.test.js",
+    "scripts/**/*.mjs"
   ]
 }
