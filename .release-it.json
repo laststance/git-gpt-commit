@@ -1,0 +1,16 @@
+{
+  "git": {
+    "changelog": null,
+    "tag": true,
+    "push": true,
+    "commit": false
+  },
+  "github": {
+    "release": true,
+    "releaseName": "v${version}",
+    "releaseNotes": "git log --no-merges --pretty=format:\"* %s %h\" ${latestTag}...main | grep -v 'release v[0-9]\\{1,3\\}\\.[0-9]\\{1,3\\}\\.[0-9]\\{1,3\\}'\n"
+  },
+  "npm": {
+    "publishArgs": ["--provenance"]
+  }
+}
