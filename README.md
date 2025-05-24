@@ -28,7 +28,7 @@ There are two ways to install the Git extension: using npm or manual installatio
 - **Step1:** run the following command:
 
 ```bash
-npm install -g @laststance/git-gpt-commit
+npm install -g @laststance/git-gpt-commit@latest
 ```
 
 - **Step2:** add your OpenAI API key using the `git gpt open-api-key`
