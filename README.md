@@ -4,9 +4,8 @@
 
 <br>
 
-
 <p align="center">
-    <code>An AI-powered Git extension</code> that generates commit messages using OpenAI's GPT-4o,  
+    <code>An AI-powered Git extension</code> that generates commit messages using OpenAI's models,  
     streamlining the commit process and improving developer productivity.
 </p>
 
@@ -39,7 +38,7 @@ git gpt open-api-key
 
 ![open-api-key](./assets/open-api-key.png)
 
-----
+---
 
 Select `Add or update API key` from the menu and enter your API key when prompted. Your key will be securely stored in your user configuration.
 
