@@ -13,7 +13,7 @@ import prompts from 'prompts'
 import { sanitizeCommitMessage } from './utils/sanitizeCommitMessage.js'
 
 let openai
-let model = 'gpt-4o' // Default model
+let model = 'gpt-4o-mini' // Default model
 let language = 'English' // Default language
 let apiKey = null // Store API key from config
 // Define prefixState using closure for safer state management
