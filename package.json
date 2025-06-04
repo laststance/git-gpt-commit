@@ -10,7 +10,7 @@
     "test": "vitest run",
     "lint": "eslint . --ext .ts,.tsx,.js,jsx,cjs,mjs",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,jsx,cjs,mjs --fix",
-    "release-commit": "node ./scripts/npm-publish-tool.mjs"
+    "push-release-commit": "node ./scripts/npm-publish-tool.mjs"
   },
   "repository": {
     "type": "git",
@@ -40,6 +40,7 @@
     "node": "22.15.0"
   },
   "devDependencies": {
+    "@inquirer/prompts": "^7.5.3",
     "@typescript-eslint/eslint-plugin": "^8.32.0",
     "@typescript-eslint/parser": "^8.32.0",
     "@vitest/coverage-v8": "3.1.4",
@@ -51,6 +52,7 @@
     "eslint-plugin-prettier": "^5.4.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.0.0",
+    "ora": "^8.2.0",
     "prettier": "^3.5.3",
     "release-it": "^19.0.2",
     "task-master-ai": "^0.15.0",

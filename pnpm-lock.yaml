@@ -21,6 +21,9 @@ importers:
         specifier: ^2.4.2
         version: 2.4.2
     devDependencies:
+      '@inquirer/prompts':
+        specifier: ^7.5.3
+        version: 7.5.3(@types/node@22.15.21)
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.32.0
         version: 8.33.0(@typescript-eslint/parser@8.33.1(eslint@8.57.0)(typescript@5.8.3))(eslint@8.57.0)(typescript@5.8.3)
@@ -54,6 +57,9 @@ importers:
       lint-staged:
         specifier: ^16.0.0
         version: 16.1.0
+      ora:
+        specifier: ^8.2.0
+        version: 8.2.0
       prettier:
         specifier: ^3.5.3
         version: 3.5.3
