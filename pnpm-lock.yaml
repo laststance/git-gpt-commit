@@ -16,7 +16,7 @@ importers:
         version: 16.5.0
       openai:
         specifier: ^5.0.2
-        version: 5.0.2(ws@8.18.1)(zod@3.25.28)
+        version: 5.1.0(ws@8.18.1)(zod@3.25.28)
       prompts:
         specifier: ^2.4.2
         version: 2.4.2
@@ -2731,8 +2731,8 @@ packages:
       zod:
         optional: true
 
-  openai@5.0.2:
-    resolution: {integrity: sha512-NN7LAAImgBmd4RIe6WyRpLmwCbn+HQ1iaXeIG7K9DM3Auy/G2waKFhrDfRgaEeY0UUPnm6nohaCsqcS+zO8+2g==}
+  openai@5.1.0:
+    resolution: {integrity: sha512-YQBgPJykHrDOlngB/8QpOsFNg36yofBatpeDWg1zejl9R59/ELuN7AMPSU95ZIdChbKc/o5vg1UnBJ1OEB0IJA==}
     hasBin: true
     peerDependencies:
       ws: ^8.18.0
@@ -6572,7 +6572,7 @@ snapshots:
     transitivePeerDependencies:
       - encoding
 
-  openai@5.0.2(ws@8.18.1)(zod@3.25.28):
+  openai@5.1.0(ws@8.18.1)(zod@3.25.28):
     optionalDependencies:
       ws: 8.18.1
       zod: 3.25.28
