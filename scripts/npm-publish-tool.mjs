@@ -70,9 +70,9 @@ try {
     message: '📦 Select version increment type:',
     choices: [
       {
-        name: '🔴 Major (breaking changes)',
-        value: 'major',
-        description: `Incompatible API changes (\x1b[1;32m${parseInt(parts[0]) + 1}\x1b[0m\x1b[37m.0.0\x1b[0m ← ${currentVersion})`,
+        name: '🟢 Patch (bug fixes)',
+        value: 'patch',
+        description: `Backwards-compatible bug fixes (\x1b[37m${parts[0]}.${parts[1]}.\x1b[0m\x1b[1;32m${parseInt(parts[2]) + 1}\x1b[0m ← ${currentVersion})`,
       },
       {
         name: '🟡 Minor (new features)',
@@ -80,9 +80,9 @@ try {
         description: `Backwards-compatible functionality (\x1b[37m${parts[0]}.\x1b[0m\x1b[1;32m${parseInt(parts[1]) + 1}\x1b[0m\x1b[37m.0\x1b[0m ← ${currentVersion})`,
       },
       {
-        name: '🟢 Patch (bug fixes)',
-        value: 'patch',
-        description: `Backwards-compatible bug fixes (\x1b[37m${parts[0]}.${parts[1]}.\x1b[0m\x1b[1;32m${parseInt(parts[2]) + 1}\x1b[0m ← ${currentVersion})`,
+        name: '🔴 Major (breaking changes)',
+        value: 'major',
+        description: `Incompatible API changes (\x1b[1;32m${parseInt(parts[0]) + 1}\x1b[0m\x1b[37m.0.0\x1b[0m ← ${currentVersion})`,
       },
     ],
   })
