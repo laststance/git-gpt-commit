@@ -10,3 +10,4 @@ dist
 storybook-static
 **/mockServiceWorker.js
 /fixture
+scripts/npm-publish-tool.mjs
