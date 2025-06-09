@@ -23,7 +23,7 @@ importers:
     devDependencies:
       '@laststance/npm-publish-tool':
         specifier: ^1.6.6
-        version: 1.6.6(@types/node@22.15.21)
+        version: 1.6.9(@types/node@22.15.21)
       '@typescript-eslint/eslint-plugin':
         specifier: ^8.32.0
         version: 8.33.1(@typescript-eslint/parser@8.33.1(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3))(eslint@9.28.0(jiti@2.4.2))(typescript@5.8.3)
@@ -486,8 +486,8 @@ packages:
   '@jridgewell/trace-mapping@0.3.25':
     resolution: {integrity: sha512-vNk6aEwybGtawWmy/PzwnGDOjCkLWSD2wqvjGGAgOAwCGWySYXfYoxt00IJkTF+8Lb57DwOb3Aa0o9CApepiYQ==}
 
-  '@laststance/npm-publish-tool@1.6.6':
-    resolution: {integrity: sha512-jzGNHVTunSMFawcj4aNXgb8gkQ4ILkg4c/e1xfGh9YsQyv1hjCn/urc9PQTngF2b04T1QVp9mCe3PqxP7VgzPg==}
+  '@laststance/npm-publish-tool@1.6.9':
+    resolution: {integrity: sha512-gBkMYEQgLLVzJ900z7YJ+4wZG+irhCpYLhMWODAx9kpHlMwFCROld5SLiATCBOzDe6t6mVql5LOjyEEs7gkWUQ==}
     engines: {node: '>=20.0.0'}
     hasBin: true
 
@@ -1115,8 +1115,8 @@ packages:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
 
-  cssstyle@4.3.1:
-    resolution: {integrity: sha512-ZgW+Jgdd7i52AaLYCriF8Mxqft0gD/R9i9wi6RWBhs1pqdPEzPjym7rvRKi397WmQFf3SlyUsszhw+VVCbx79Q==}
+  cssstyle@4.4.0:
+    resolution: {integrity: sha512-W0Y2HOXlPkb2yaKrCVRjinYKciu/qSLEmK0K9mcfDei3zwlnHFEHAs/Du3cIRwPqY+J4JsiBzUjoHyc8RsJ03A==}
     engines: {node: '>=18'}
 
   data-uri-to-buffer@6.0.2:
@@ -1229,8 +1229,8 @@ packages:
   emoji-regex@9.2.2:
     resolution: {integrity: sha512-L18DaJsXSUk2+42pv8mLs5jJT2hqFkFE4j21wOmgbUqsZ2hL72NsUU785g9RXgo3s0ZNgVl42TiHp3ZtOv/Vyg==}
 
-  entities@6.0.0:
-    resolution: {integrity: sha512-aKstq2TDOndCn4diEyp9Uq/Flu2i1GlLkc6XIDQSDMuaFE3OPW5OphLCyQ5SpSJZTb4reN+kTcYru5yIfXoRPw==}
+  entities@6.0.1:
+    resolution: {integrity: sha512-aN97NXWF6AWBTahfVOIrB/NShkzi5H7F9r1s9mD3cDj4Ko5f2qhhVoYMibXF7GlLveb/D2ioWay8lxI97Ven3g==}
     engines: {node: '>=0.12'}
 
   environment@1.1.0:
@@ -3186,7 +3186,7 @@ snapshots:
       '@jridgewell/resolve-uri': 3.1.2
       '@jridgewell/sourcemap-codec': 1.5.0
 
-  '@laststance/npm-publish-tool@1.6.6(@types/node@22.15.21)':
+  '@laststance/npm-publish-tool@1.6.9(@types/node@22.15.21)':
     dependencies:
       '@inquirer/prompts': 7.5.3(@types/node@22.15.21)
       chalk: 5.4.1
@@ -3823,7 +3823,7 @@ snapshots:
       shebang-command: 2.0.0
       which: 2.0.2
 
-  cssstyle@4.3.1:
+  cssstyle@4.4.0:
     dependencies:
       '@asamuzakjp/css-color': 3.2.0
       rrweb-cssom: 0.8.0
@@ -3925,7 +3925,7 @@ snapshots:
 
   emoji-regex@9.2.2: {}
 
-  entities@6.0.0:
+  entities@6.0.1:
     optional: true
 
   environment@1.1.0: {}
@@ -4697,7 +4697,7 @@ snapshots:
 
   jsdom@26.1.0:
     dependencies:
-      cssstyle: 4.3.1
+      cssstyle: 4.4.0
       data-urls: 5.0.0
       decimal.js: 10.5.0
       html-encoding-sniffer: 4.0.0
@@ -5027,7 +5027,7 @@ snapshots:
 
   parse5@7.3.0:
     dependencies:
-      entities: 6.0.0
+      entities: 6.0.1
     optional: true
 
   path-exists@4.0.0: {}
