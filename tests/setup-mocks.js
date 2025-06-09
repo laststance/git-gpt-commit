@@ -37,7 +37,8 @@ vi.mock('../index.js', () => {
 
         // Return mocked diff content
         return `diff --git a/file1.js b/file1.js\nindex 123456..789012 100644\n--- a/file1.js\n+++ b/file1.js\n@@ -1,5 +1,8 @@\nfunction greet(name) {\n-  return \`Hello, \${name}!\`;\n+  // Add default value when name is empty\n+  const userName = name || 'Guest';\n+  return \`Hello, \${userName}!\`;\n }`
-      } catch (__) {
+        // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      } catch (_e) {
         throw new Error('Failed to get git summary')
       }
     }),

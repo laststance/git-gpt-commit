@@ -22,10 +22,9 @@
     "./**.ts",
     "./**.cjs",
     "./**.mjs",
-    "fixtures/**/*.js",
     "tests/**/*.js",
+    "fixtures/**/*.js",
     "utils/**/*.js",
-    "utils/**/*.test.js",
-    "scripts/**/*.mjs"
+    "utils/**/*.test.js"
   ]
 }
