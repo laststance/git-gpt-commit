@@ -1,6 +1,6 @@
 {
   "name": "@laststance/git-gpt-commit",
-  "version": "0.9.9",
+  "version": "0.9.10",
   "description": "An AI-powered Git extension that generates commit messages using OpenAI's GPT-3, streamlining the commit process and improving developer productivity.",
   "main": "index.js",
   "type": "module",
@@ -10,7 +10,7 @@
     "test": "vitest run",
     "lint": "eslint . --ext .ts,.tsx,.js,jsx,cjs,mjs",
     "lint:fix": "eslint . --ext .ts,.tsx,.js,jsx,cjs,mjs --fix",
-    "push-release-commit": "node ./scripts/npm-publish-tool.mjs"
+    "push-release-commit": "push-release-commit"
   },
   "repository": {
     "type": "git",
