@@ -13,7 +13,7 @@ import prompts from 'prompts'
 import { sanitizeCommitMessage } from './utils/sanitizeCommitMessage.js'
 
 let openai
-let model = 'gpt-4o-mini' // Default model
+let model = 'gpt-5-mini' // Default model
 let language = 'English' // Default language
 let apiKey = null // Store API key from config
 // Define prefixState using closure for safer state management
@@ -125,15 +125,32 @@ const gptCommit = async () => {
     {
       role: 'system',
       content:
-        'You are a helpful assistant. Write the commit message in ' +
+        'You are an expert Git commit message writer. Generate semantic, meaningful commit messages that explain the PURPOSE and IMPACT of changes, not just what changed. ' +
+        'Focus on WHY the change was made and its benefits. Write in ' +
         language +
-        '.',
+        '. Keep messages concise but descriptive, under 72 characters for the subject line.',
     },
     {
       role: 'user',
       content: prefixState.isEnabled()
-        ? `Generate a Git commit message based on the following summary, with an appropriate prefix (add:, fix:, feat:, refactor:, chore:, perf:, test:, style:, docs:, merge:, build:, ci:, revert:, merge:) based on the type of changes: ${gitSummary}\n\nCommit message: `
-        : `Generate a Git commit message based on the following summary: ${gitSummary}\n\nCommit message: `,
+        ? `Analyze the following git diff and generate a semantic commit message that explains the purpose and impact of these changes. 
+Use an appropriate conventional commit prefix (feat:, fix:, chore:, refactor:, perf:, test:, style:, docs:, build:, ci:, revert:) based on the type and intent of changes.
+Structure: <prefix>: <what> to <achieve what benefit/fix what issue>
+Example: "feat: add user authentication to improve security"
+
+Git diff summary:
+${gitSummary}
+
+Commit message: `
+        : `Analyze the following git diff and generate a semantic commit message that explains the purpose and impact of these changes.
+Focus on the intent and benefit of the changes, not just listing what was modified.
+Structure: <what was done> to <achieve what benefit/fix what issue>
+Example: "Add user authentication to improve application security"
+
+Git diff summary:
+${gitSummary}
+
+Commit message: `,
     },
   ]
 
@@ -142,7 +159,7 @@ const gptCommit = async () => {
     messages,
     n: 1,
     temperature: 0,
-    max_tokens: 50,
+    max_tokens: 100,
   }
 
   const response = await openai.chat.completions.create(parameters)
@@ -188,10 +205,19 @@ const gitExtension = (_args) => {
         name: 'value',
         message: 'Select a model',
         choices: [
-          { title: 'gpt-4o-mini (Recommended)', value: 'gpt-4o-mini' },
-          { title: 'gpt-4o', value: 'gpt-4o' },
-          { title: 'gpt-4.1-nano (Latest Fast)', value: 'gpt-4.1-nano' },
-          { title: 'gpt-4.1-mini (Latest)', value: 'gpt-4.1-mini' },
+          {
+            title: 'gpt-5-mini (Recommended - Lightweight)',
+            value: 'gpt-5-mini',
+          },
+          { title: 'gpt-5 (Flagship - Balanced)', value: 'gpt-5' },
+          { title: 'gpt-5-nano (Fastest - API Only)', value: 'gpt-5-nano' },
+          { title: 'gpt-5-pro (Most Powerful)', value: 'gpt-5-pro' },
+          {
+            title: 'gpt-5-thinking (Extended Reasoning)',
+            value: 'gpt-5-thinking',
+          },
+          { title: 'gpt-4o-mini (Previous Gen)', value: 'gpt-4o-mini' },
+          { title: 'gpt-4o (Previous Gen)', value: 'gpt-4o' },
           { title: 'gpt-3.5-turbo (Legacy)', value: 'gpt-3.5-turbo' },
         ],
         initial: 0,
