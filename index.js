@@ -133,7 +133,7 @@ const gptCommit = async () => {
     {
       role: 'user',
       content: prefixState.isEnabled()
-        ? `Analyze the following git diff and generate a semantic commit message that explains the purpose and impact of these changes. 
+        ? `Analyze the following git diff and generate a semantic commit message that explains the purpose and impact of these changes.
 Use an appropriate conventional commit prefix (feat:, fix:, chore:, refactor:, perf:, test:, style:, docs:, build:, ci:, revert:) based on the type and intent of changes.
 Structure: <prefix>: <what> to <achieve what benefit/fix what issue>
 Example: "feat: add user authentication to improve security"
@@ -158,7 +158,7 @@ Commit message: `,
     model,
     messages,
     n: 1,
-    temperature: 0,
+    temperature: 1,
     max_completion_tokens: 200,
   }
 
