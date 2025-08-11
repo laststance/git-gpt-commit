@@ -216,6 +216,9 @@ const gitExtension = (_args) => {
             title: 'gpt-5-thinking (Extended Reasoning)',
             value: 'gpt-5-thinking',
           },
+          { title: 'gpt-4o-mini (Previous Gen)', value: 'gpt-4o-mini' },
+          { title: 'gpt-4o (Previous Gen)', value: 'gpt-4o' },
+          { title: 'gpt-3.5-turbo (Legacy)', value: 'gpt-3.5-turbo' },
         ],
         initial: 0,
       })

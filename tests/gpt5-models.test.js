@@ -1,9 +1,9 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import fs from 'fs'
-import path from 'path'
 import os from 'os'
+import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
-import { dirname } from 'path'
+
+import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -32,9 +32,6 @@ describe('GPT-5 Model Integration', () => {
 
   describe('Model Configuration', () => {
     it('should have gpt-5-mini as the default model', async () => {
-      // Import the module fresh
-      const indexModule = await import('../index.js')
-
       // Check the default model by reading the file content
       const indexContent = fs.readFileSync(
         path.join(__dirname, '..', 'index.js'),
@@ -110,8 +107,8 @@ describe('GPT-5 Model Integration', () => {
         'utf8',
       )
 
-      // Check that max_tokens was increased from 50 to 100
-      expect(indexContent).toContain('max_tokens: 100')
+      // Check that max_completion_tokens was increased to 200
+      expect(indexContent).toContain('max_completion_tokens: 200')
       expect(indexContent).not.toContain('max_tokens: 50')
     })
   })
@@ -132,10 +129,10 @@ describe('GPT-5 Model Integration', () => {
       const choicesText = choicesMatch[1]
 
       // Check that GPT-5 models appear before GPT-4 models
-      const gpt5MiniIndex = choicesText.indexOf('gpt-5-mini')
-      const gpt5Index = choicesText.indexOf("'gpt-5'")
-      const gpt4oMiniIndex = choicesText.indexOf('gpt-4o-mini')
-      const gpt35Index = choicesText.indexOf('gpt-3.5-turbo')
+      const gpt5MiniIndex = choicesText.indexOf("value: 'gpt-5-mini'")
+      const gpt5Index = choicesText.indexOf("value: 'gpt-5'")
+      const gpt4oMiniIndex = choicesText.indexOf("value: 'gpt-4o-mini'")
+      const gpt35Index = choicesText.indexOf("value: 'gpt-3.5-turbo'")
 
       expect(gpt5MiniIndex).toBeLessThan(gpt4oMiniIndex)
       expect(gpt5Index).toBeLessThan(gpt4oMiniIndex)
