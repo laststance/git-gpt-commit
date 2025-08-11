@@ -159,7 +159,7 @@ Commit message: `,
     messages,
     n: 1,
     temperature: 0,
-    max_tokens: 100,
+    max_completion_tokens: 200,
   }
 
   const response = await openai.chat.completions.create(parameters)
@@ -216,9 +216,6 @@ const gitExtension = (_args) => {
             title: 'gpt-5-thinking (Extended Reasoning)',
             value: 'gpt-5-thinking',
           },
-          { title: 'gpt-4o-mini (Previous Gen)', value: 'gpt-4o-mini' },
-          { title: 'gpt-4o (Previous Gen)', value: 'gpt-4o' },
-          { title: 'gpt-3.5-turbo (Legacy)', value: 'gpt-3.5-turbo' },
         ],
         initial: 0,
       })

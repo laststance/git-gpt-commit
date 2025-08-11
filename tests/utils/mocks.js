@@ -21,7 +21,7 @@ export function mockOpenAIResponse(content, options = {}) {
     ],
     usage: {
       prompt_tokens: 219,
-      completion_tokens: 58,
+      max_completion_tokens: 58,
       total_tokens: 277,
     },
     object: 'chat.completion',
