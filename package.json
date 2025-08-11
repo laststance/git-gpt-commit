@@ -1,6 +1,6 @@
 {
   "name": "@laststance/git-gpt-commit",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "description": "An AI-powered Git extension that generates commit messages using OpenAI's GPT models (GPT-3 to GPT-5), streamlining the commit process and improving developer productivity.",
   "main": "index.js",
   "type": "module",
