@@ -8,7 +8,7 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
 
-describe('GPT-5 Model Integration', () => {
+describe('Model Configuration', () => {
   let originalConfigFile
   const CONFIG_FILE = path.join(os.homedir(), '.git-gpt-commit-config.json')
 
@@ -30,45 +30,41 @@ describe('GPT-5 Model Integration', () => {
     vi.clearAllMocks()
   })
 
-  describe('Model Configuration', () => {
-    it('should have gpt-5-mini as the default model', async () => {
+  describe('Default Model', () => {
+    it('should have gpt-4o-mini as the default model', async () => {
       // Check the default model by reading the file content
       const indexContent = fs.readFileSync(
         path.join(__dirname, '..', 'index.js'),
         'utf8',
       )
       expect(indexContent).toContain(
-        "let model = 'gpt-5-mini' // Default model",
+        "let model = 'gpt-4o-mini' // Default model",
       )
     })
 
-    it('should include all GPT-5 series models in the selection list', async () => {
+    it('should include available OpenAI models in the selection list', async () => {
       const indexContent = fs.readFileSync(
         path.join(__dirname, '..', 'index.js'),
         'utf8',
       )
 
-      // Check for all GPT-5 models
-      expect(indexContent).toContain('gpt-5-mini (Recommended - Lightweight)')
-      expect(indexContent).toContain('gpt-5 (Flagship - Balanced)')
-      expect(indexContent).toContain('gpt-5-nano (Fastest - API Only)')
-      expect(indexContent).toContain('gpt-5-pro (Most Powerful)')
-      expect(indexContent).toContain('gpt-5-thinking (Extended Reasoning)')
-
-      // Check that previous gen models are still available
-      expect(indexContent).toContain('gpt-4o-mini (Previous Gen)')
-      expect(indexContent).toContain('gpt-4o (Previous Gen)')
+      // Check for available models
+      expect(indexContent).toContain(
+        'gpt-4o-mini (Recommended - Fast & Affordable)',
+      )
+      expect(indexContent).toContain('gpt-4o (Flagship - Best Quality)')
+      expect(indexContent).toContain('gpt-4-turbo (High Performance)')
       expect(indexContent).toContain('gpt-3.5-turbo (Legacy)')
     })
 
-    it('should save selected GPT-5 model to config file', () => {
+    it('should save selected model to config file', () => {
       // Create a test config
-      const testConfig = { model: 'gpt-5-pro' }
+      const testConfig = { model: 'gpt-4o' }
       fs.writeFileSync(CONFIG_FILE, JSON.stringify(testConfig, null, 2))
 
       // Read and verify
       const savedConfig = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'))
-      expect(savedConfig.model).toBe('gpt-5-pro')
+      expect(savedConfig.model).toBe('gpt-4o')
     })
   })
 
@@ -101,20 +97,21 @@ describe('GPT-5 Model Integration', () => {
       )
     })
 
-    it('should have increased max_tokens for longer semantic messages', async () => {
+    it('should use max_tokens parameter (SDK v5 compatible)', async () => {
       const indexContent = fs.readFileSync(
         path.join(__dirname, '..', 'index.js'),
         'utf8',
       )
 
-      // Check that max_completion_tokens was increased to 200
-      expect(indexContent).toContain('max_completion_tokens: 200')
-      expect(indexContent).not.toContain('max_tokens: 50')
+      // Check that max_tokens is used (SDK v5 parameter)
+      expect(indexContent).toContain('max_tokens: 200')
+      // Should NOT contain deprecated parameter
+      expect(indexContent).not.toContain('max_completion_tokens')
     })
   })
 
   describe('Model Selection Order', () => {
-    it('should list GPT-5 models before legacy models', async () => {
+    it('should list recommended model first', async () => {
       const indexContent = fs.readFileSync(
         path.join(__dirname, '..', 'index.js'),
         'utf8',
@@ -128,15 +125,38 @@ describe('GPT-5 Model Integration', () => {
 
       const choicesText = choicesMatch[1]
 
-      // Check that GPT-5 models appear before GPT-4 models
-      const gpt5MiniIndex = choicesText.indexOf("value: 'gpt-5-mini'")
-      const gpt5Index = choicesText.indexOf("value: 'gpt-5'")
+      // Check that gpt-4o-mini appears before other models
       const gpt4oMiniIndex = choicesText.indexOf("value: 'gpt-4o-mini'")
+      const gpt4oIndex = choicesText.indexOf("value: 'gpt-4o'")
       const gpt35Index = choicesText.indexOf("value: 'gpt-3.5-turbo'")
 
-      expect(gpt5MiniIndex).toBeLessThan(gpt4oMiniIndex)
-      expect(gpt5Index).toBeLessThan(gpt4oMiniIndex)
-      expect(gpt4oMiniIndex).toBeLessThan(gpt35Index)
+      expect(gpt4oMiniIndex).toBeLessThan(gpt4oIndex)
+      expect(gpt4oIndex).toBeLessThan(gpt35Index)
+    })
+  })
+
+  describe('API Parameters', () => {
+    it('should use temperature 0.7 for balanced output', async () => {
+      const indexContent = fs.readFileSync(
+        path.join(__dirname, '..', 'index.js'),
+        'utf8',
+      )
+
+      expect(indexContent).toContain('temperature: 0.7')
+    })
+
+    it('should not include deprecated n parameter', async () => {
+      const indexContent = fs.readFileSync(
+        path.join(__dirname, '..', 'index.js'),
+        'utf8',
+      )
+
+      // The parameters object should not contain n: 1
+      const parametersMatch = indexContent.match(
+        /const parameters = \{[\s\S]*?\}/m,
+      )
+      expect(parametersMatch).toBeTruthy()
+      expect(parametersMatch[0]).not.toContain('n: 1')
     })
   })
 })

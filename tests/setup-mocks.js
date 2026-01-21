@@ -68,7 +68,7 @@ vi.mock('fs', async () => {
       // Return mock data for config file
       if (path.includes('.git-gpt-commit-config.json')) {
         return JSON.stringify({
-          model: 'gpt-4o',
+          model: 'gpt-4o-mini',
           language: 'English',
         })
       }

@@ -13,7 +13,7 @@ import prompts from 'prompts'
 import { sanitizeCommitMessage } from './utils/sanitizeCommitMessage.js'
 
 let openai
-let model = 'gpt-5-mini' // Default model
+let model = 'gpt-4o-mini' // Default model
 let language = 'English' // Default language
 let apiKey = null // Store API key from config
 // Define prefixState using closure for safer state management
@@ -157,12 +157,25 @@ Commit message: `,
   const parameters = {
     model,
     messages,
-    n: 1,
-    temperature: 1,
-    max_completion_tokens: 200,
+    temperature: 0.7,
+    max_tokens: 200,
   }
 
-  const response = await openai.chat.completions.create(parameters)
+  let response
+  try {
+    response = await openai.chat.completions.create(parameters)
+  } catch (err) {
+    if (err.status === 401) {
+      console.error('Invalid API key. Run: git gpt open-api-key add')
+    } else if (err.status === 404) {
+      console.error(`Model "${model}" not found. Run: git gpt model`)
+    } else if (err.status === 429) {
+      console.error('Rate limit exceeded. Please try again later.')
+    } else {
+      console.error('OpenAI API Error:', err.message)
+    }
+    process.exit(1)
+  }
   const message = response.choices[0].message.content.trim()
   const sanitizedMessage = sanitizeCommitMessage(message)
 
@@ -206,18 +219,11 @@ const gitExtension = (_args) => {
         message: 'Select a model',
         choices: [
           {
-            title: 'gpt-5-mini (Recommended - Lightweight)',
-            value: 'gpt-5-mini',
+            title: 'gpt-4o-mini (Recommended - Fast & Affordable)',
+            value: 'gpt-4o-mini',
           },
-          { title: 'gpt-5 (Flagship - Balanced)', value: 'gpt-5' },
-          { title: 'gpt-5-nano (Fastest - API Only)', value: 'gpt-5-nano' },
-          { title: 'gpt-5-pro (Most Powerful)', value: 'gpt-5-pro' },
-          {
-            title: 'gpt-5-thinking (Extended Reasoning)',
-            value: 'gpt-5-thinking',
-          },
-          { title: 'gpt-4o-mini (Previous Gen)', value: 'gpt-4o-mini' },
-          { title: 'gpt-4o (Previous Gen)', value: 'gpt-4o' },
+          { title: 'gpt-4o (Flagship - Best Quality)', value: 'gpt-4o' },
+          { title: 'gpt-4-turbo (High Performance)', value: 'gpt-4-turbo' },
           { title: 'gpt-3.5-turbo (Legacy)', value: 'gpt-3.5-turbo' },
         ],
         initial: 0,

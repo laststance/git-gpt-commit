@@ -8,7 +8,7 @@ import { vi } from 'vitest'
  */
 export function mockOpenAIResponse(content, options = {}) {
   const defaultResponse = {
-    model: options.model || 'gpt-4o',
+    model: options.model || 'gpt-4o-mini',
     choices: [
       {
         message: {
@@ -21,7 +21,7 @@ export function mockOpenAIResponse(content, options = {}) {
     ],
     usage: {
       prompt_tokens: 219,
-      max_completion_tokens: 58,
+      completion_tokens: 58,
       total_tokens: 277,
     },
     object: 'chat.completion',
