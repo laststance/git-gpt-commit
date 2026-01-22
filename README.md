@@ -1,6 +1,3 @@
-> [!WARNING]
-> Latest version not working at the time. Please download `v0.9.10`
-
 <h1 align="center">
     Git GPT Commit
 </h1>
@@ -30,7 +27,7 @@ There are two ways to install the Git extension: using npm or manual installatio
 - **Step1:** run the following command:
 
 ```bash
-npm install -g @laststance/git-gpt-commit@0.9.10
+npm install -g @laststance/git-gpt-commit@latest
 ```
 
 - **Step2:** add your OpenAI API key using the `git gpt open-api-key`
