@@ -32,29 +32,27 @@ describe('Model Configuration', () => {
 
   describe('Default Model', () => {
     it('should have gpt-4o-mini as the default model', async () => {
-      // Check the default model by reading the file content
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      // Check the default model in config defaults
+      const defaultsContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'config', 'defaults.js'),
         'utf8',
       )
-      expect(indexContent).toContain(
-        "let model = 'gpt-4o-mini' // Default model",
-      )
+      expect(defaultsContent).toContain("model: 'gpt-4o-mini'")
     })
 
     it('should include available OpenAI models in the selection list', async () => {
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      const defaultsContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'config', 'defaults.js'),
         'utf8',
       )
 
       // Check for available models
-      expect(indexContent).toContain(
+      expect(defaultsContent).toContain(
         'gpt-4o-mini (Recommended - Fast & Affordable)',
       )
-      expect(indexContent).toContain('gpt-4o (Flagship - Best Quality)')
-      expect(indexContent).toContain('gpt-4-turbo (High Performance)')
-      expect(indexContent).toContain('gpt-3.5-turbo (Legacy)')
+      expect(defaultsContent).toContain('gpt-4o (Flagship - Best Quality)')
+      expect(defaultsContent).toContain('gpt-4-turbo (High Performance)')
+      expect(defaultsContent).toContain('gpt-3.5-turbo (Legacy)')
     })
 
     it('should save selected model to config file', () => {
@@ -70,65 +68,69 @@ describe('Model Configuration', () => {
 
   describe('Semantic Commit Messages', () => {
     it('should have improved system prompt for semantic messages', async () => {
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      const messageBuilderContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'core', 'messageBuilder.js'),
         'utf8',
       )
 
       // Check for improved system prompt
-      expect(indexContent).toContain('expert Git commit message writer')
-      expect(indexContent).toContain('PURPOSE and IMPACT')
-      expect(indexContent).toContain('Focus on WHY')
-      expect(indexContent).toContain('72 characters for the subject line')
+      expect(messageBuilderContent).toContain(
+        'expert Git commit message writer',
+      )
+      expect(messageBuilderContent).toContain('PURPOSE and IMPACT')
+      expect(messageBuilderContent).toContain('Focus on WHY')
+      expect(messageBuilderContent).toContain(
+        '72 characters for the subject line',
+      )
     })
 
     it('should include structured commit message examples in prompt', async () => {
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      const messageBuilderContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'core', 'messageBuilder.js'),
         'utf8',
       )
 
       // Check for structured examples
-      expect(indexContent).toContain(
+      expect(messageBuilderContent).toContain(
         'Structure: <prefix>: <what> to <achieve what benefit/fix what issue>',
       )
-      expect(indexContent).toContain(
+      expect(messageBuilderContent).toContain(
         'Example: "feat: add user authentication to improve security"',
       )
     })
 
     it('should use max_completion_tokens parameter (forward-compatible)', async () => {
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      const openaiServiceContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'services', 'openai.js'),
         'utf8',
       )
 
       // Check that max_completion_tokens is used (works with all models including o1)
-      expect(indexContent).toContain('max_completion_tokens: 200')
-      // Should NOT contain deprecated parameter
-      expect(indexContent).not.toContain('max_tokens:')
+      expect(openaiServiceContent).toContain('max_completion_tokens')
+      // Should NOT contain deprecated parameter as the parameter name
+      expect(openaiServiceContent).not.toMatch(/\bmax_tokens\s*:/)
     })
   })
 
   describe('Model Selection Order', () => {
     it('should list recommended model first', async () => {
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      const defaultsContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'config', 'defaults.js'),
         'utf8',
       )
 
-      // Extract the choices array
-      const choicesMatch = indexContent.match(
-        /choices: \[([\s\S]*?)\],\s*initial:/m,
+      // Extract the availableModels array
+      const modelsMatch = defaultsContent.match(
+        /export const availableModels = \[([\s\S]*?)\]/m,
       )
-      expect(choicesMatch).toBeTruthy()
+      expect(modelsMatch).toBeTruthy()
 
-      const choicesText = choicesMatch[1]
+      const modelsText = modelsMatch[1]
 
       // Check that gpt-4o-mini appears before other models
-      const gpt4oMiniIndex = choicesText.indexOf("value: 'gpt-4o-mini'")
-      const gpt4oIndex = choicesText.indexOf("value: 'gpt-4o'")
-      const gpt35Index = choicesText.indexOf("value: 'gpt-3.5-turbo'")
+      const gpt4oMiniIndex = modelsText.indexOf("value: 'gpt-4o-mini'")
+      const gpt4oIndex = modelsText.indexOf("value: 'gpt-4o'")
+      const gpt35Index = modelsText.indexOf("value: 'gpt-3.5-turbo'")
 
       expect(gpt4oMiniIndex).toBeLessThan(gpt4oIndex)
       expect(gpt4oIndex).toBeLessThan(gpt35Index)
@@ -137,26 +139,22 @@ describe('Model Configuration', () => {
 
   describe('API Parameters', () => {
     it('should use temperature 0.7 for balanced output', async () => {
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      const commitGeneratorContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'core', 'commitGenerator.js'),
         'utf8',
       )
 
-      expect(indexContent).toContain('temperature: 0.7')
+      expect(commitGeneratorContent).toContain('temperature: 0.7')
     })
 
     it('should not include deprecated n parameter', async () => {
-      const indexContent = fs.readFileSync(
-        path.join(__dirname, '..', 'index.js'),
+      const openaiServiceContent = fs.readFileSync(
+        path.join(__dirname, '..', 'src', 'services', 'openai.js'),
         'utf8',
       )
 
-      // The parameters object should not contain n: 1
-      const parametersMatch = indexContent.match(
-        /const parameters = \{[\s\S]*?\}/m,
-      )
-      expect(parametersMatch).toBeTruthy()
-      expect(parametersMatch[0]).not.toContain('n: 1')
+      // The create call should not contain n: 1
+      expect(openaiServiceContent).not.toContain('n: 1')
     })
   })
 })

@@ -19,6 +19,7 @@
   "files": [
     "README.md",
     "index.js",
+    "src",
     "utils"
   ],
   "author": "Ryota Murakami <dojce1048@gmail.com> (https://github.com/ryota-murakami)",
