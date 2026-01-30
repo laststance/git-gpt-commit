@@ -97,16 +97,16 @@ describe('Model Configuration', () => {
       )
     })
 
-    it('should use max_tokens parameter (SDK v5 compatible)', async () => {
+    it('should use max_completion_tokens parameter (forward-compatible)', async () => {
       const indexContent = fs.readFileSync(
         path.join(__dirname, '..', 'index.js'),
         'utf8',
       )
 
-      // Check that max_tokens is used (SDK v5 parameter)
-      expect(indexContent).toContain('max_tokens: 200')
+      // Check that max_completion_tokens is used (works with all models including o1)
+      expect(indexContent).toContain('max_completion_tokens: 200')
       // Should NOT contain deprecated parameter
-      expect(indexContent).not.toContain('max_completion_tokens')
+      expect(indexContent).not.toContain('max_tokens:')
     })
   })
 

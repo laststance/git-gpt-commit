@@ -158,7 +158,7 @@ Commit message: `,
     model,
     messages,
     temperature: 0.7,
-    max_tokens: 200,
+    max_completion_tokens: 200,
   }
 
   let response
