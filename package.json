@@ -37,7 +37,7 @@
     "git-gpt": "./index.js"
   },
   "volta": {
-    "node": "22.18.0"
+    "node": "24.13.0"
   },
   "devDependencies": {
     "@laststance/npm-publish-tool": "^1.6.9",
