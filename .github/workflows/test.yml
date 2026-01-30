@@ -8,10 +8,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - uses: szenius/set-timezone@v1.2
+      - uses: szenius/set-timezone@ce9c440bc3af4f51b28d7ef7e5c47ee8f26c8dcb # v1.2
         with:
           timezoneLinux: 'Asia/Tokyo'
-      - uses: actions/checkout@v4
+      # SHA-pinned actions (prevent tag hijacking)
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - uses: ./.github/actions/prepare
       - name: Create .env file
         run: |
