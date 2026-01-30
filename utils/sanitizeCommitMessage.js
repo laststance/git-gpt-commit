@@ -1,5 +1,14 @@
-// TODO should allow emojis
+/**
+ * Sanitizes a commit message by removing quote characters that can cause
+ * issues with shell commands.
+ *
+ * Only removes: " (double quote), ' (single quote), ` (backtick)
+ * All other characters including emojis, symbols, and Unicode are preserved.
+ *
+ * @param {string} message - The commit message to sanitize
+ * @returns {string} The sanitized commit message
+ */
 export function sanitizeCommitMessage(message) {
-  // Unicode regex: Allow only all characters (including Japanese and Traditional Chinese), numbers, spaces, and symbols.
-  return message.replace(/[^\p{L}\p{N}\s.:@<>\/-]/gu, '')
+  // Remove only quote literals that can cause shell escaping issues
+  return message.replace(/["'`]/g, '')
 }

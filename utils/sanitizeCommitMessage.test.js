@@ -7,9 +7,15 @@ describe('sanitizeCommitMessage', () => {
     expect(sanitizeCommitMessage('')).toBe('')
   })
 
-  it('should remove disallowed special characters', () => {
-    expect(sanitizeCommitMessage('fix: bug!@#$%^&*()_+=[]{}|;\'",?')).toBe(
-      'fix: bug@',
+  it('should remove quote characters (double, single, backtick)', () => {
+    expect(
+      sanitizeCommitMessage('fix: "bug" with \'quotes\' and `backticks`'),
+    ).toBe('fix: bug with quotes and backticks')
+  })
+
+  it('should preserve all other special characters', () => {
+    expect(sanitizeCommitMessage('fix: bug!@#$%^&*()_+=[]{}|;,?')).toBe(
+      'fix: bug!@#$%^&*()_+=[]{}|;,?',
     )
   })
 
@@ -19,32 +25,48 @@ describe('sanitizeCommitMessage', () => {
     )
   })
 
-  it('should allow numbers, spaces, and allowed symbols', () => {
+  it('should allow numbers, spaces, and symbols', () => {
     expect(
       sanitizeCommitMessage('feat: add 1234 /path/to/file - update.'),
     ).toBe('feat: add 1234 /path/to/file - update.')
   })
 
-  it('should trim leading and trailing whitespace', () => {
+  it('should preserve leading and trailing whitespace', () => {
     expect(sanitizeCommitMessage('   chore: update dependencies   ')).toBe(
       '   chore: update dependencies   ',
     )
   })
 
-  it('should handle commit messages exceeding a certain length (truncate to 100 chars)', () => {
+  it('should handle long commit messages without truncation', () => {
     const longMsg = 'a'.repeat(120)
-    // The function itself does not truncate, so it should return the full sanitized string
     expect(sanitizeCommitMessage(longMsg)).toBe(longMsg)
   })
 
-  it('should not remove allowed symbols like . : @ < > / -', () => {
-    expect(
-      sanitizeCommitMessage('refactor: move code @ <main> /src/utils - done.'),
-    ).toBe('refactor: move code @ <main> /src/utils - done.')
+  it('should preserve conventional commit format with parentheses', () => {
+    expect(sanitizeCommitMessage('feat(auth): add login feature')).toBe(
+      'feat(auth): add login feature',
+    )
   })
 
-  // TODO should allow emojis
-  it('should remove emojis and unsupported unicode', () => {
-    expect(sanitizeCommitMessage('fix: bug 🐛🔥💥')).toBe('fix: bug ')
+  it('should preserve breaking change indicator (!)', () => {
+    expect(sanitizeCommitMessage('feat!: breaking API change')).toBe(
+      'feat!: breaking API change',
+    )
+  })
+
+  it('should preserve issue references (#)', () => {
+    expect(sanitizeCommitMessage('fix: resolve issue #123')).toBe(
+      'fix: resolve issue #123',
+    )
+  })
+
+  it('should allow emojis', () => {
+    expect(sanitizeCommitMessage('fix: bug 🐛🔥💥')).toBe('fix: bug 🐛🔥💥')
+  })
+
+  it('should only remove quotes from mixed content', () => {
+    expect(
+      sanitizeCommitMessage('feat(scope)!: add "dark mode" for issue #42 🎨'),
+    ).toBe('feat(scope)!: add dark mode for issue #42 🎨')
   })
 })
