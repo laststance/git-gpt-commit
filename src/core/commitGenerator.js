@@ -12,11 +12,12 @@ import { buildMessages } from './messageBuilder.js'
  * @param {string} options.model - The GPT model to use
  * @param {string} options.language - The target language
  * @param {boolean} options.prefixEnabled - Whether to use prefixes
+ * @param {boolean} [options.allowEmojis=true] - Whether to allow emojis
  * @returns {Promise<string>} The sanitized commit message
  */
 export async function generateCommitMessage(deps, options) {
   const { openaiService, client } = deps
-  const { diff, model, language, prefixEnabled } = options
+  const { diff, model, language, prefixEnabled, allowEmojis = true } = options
 
   const messages = buildMessages({ diff, language, prefixEnabled })
 
@@ -27,5 +28,5 @@ export async function generateCommitMessage(deps, options) {
     maxTokens: 200,
   })
 
-  return sanitizeCommitMessage(rawMessage)
+  return sanitizeCommitMessage(rawMessage, allowEmojis)
 }
