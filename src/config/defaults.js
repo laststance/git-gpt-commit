@@ -16,6 +16,7 @@ export const defaults = {
   model: 'gpt-4o-mini',
   language: 'English',
   prefixEnabled: true,
+  allowEmojis: true,
   apiKey: null,
 }
 
