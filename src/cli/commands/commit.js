@@ -55,6 +55,7 @@ export function createCommitCommand({ config }) {
           model: config.get('model'),
           language: config.get('language'),
           prefixEnabled: config.get('prefixEnabled'),
+          allowEmojis: config.get('allowEmojis'),
         },
       )
 

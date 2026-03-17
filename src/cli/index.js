@@ -7,6 +7,7 @@ import {
   createModelCommand,
   createLangCommand,
   createPrefixCommand,
+  createEmojiCommand,
   createApiKeyCommand,
   createConfigCommand,
 } from './commands/index.js'
@@ -48,6 +49,11 @@ export function setupCli(options = {}) {
     .command('prefix')
     .description('Toggle commit message prefix (e.g., fix:, feat:, refactor:)')
     .action(createPrefixCommand(deps))
+
+  program
+    .command('emoji')
+    .description('Toggle emoji support in commit messages')
+    .action(createEmojiCommand(deps))
 
   program
     .command('open-api-key')

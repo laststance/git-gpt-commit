@@ -60,8 +60,18 @@ describe('sanitizeCommitMessage', () => {
     )
   })
 
-  it('should allow emojis', () => {
+  it('should allow emojis by default', () => {
     expect(sanitizeCommitMessage('fix: bug 🐛🔥💥')).toBe('fix: bug 🐛🔥💥')
+  })
+
+  it('should allow emojis when allowEmojis is true', () => {
+    expect(sanitizeCommitMessage('fix: bug 🐛🔥💥', true)).toBe(
+      'fix: bug 🐛🔥💥',
+    )
+  })
+
+  it('should strip emojis when allowEmojis is false', () => {
+    expect(sanitizeCommitMessage('fix: bug 🐛🔥💥', false)).toBe('fix: bug ')
   })
 
   it('should only remove quotes from mixed content', () => {
