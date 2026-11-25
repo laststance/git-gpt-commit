@@ -22,7 +22,7 @@
 
 ## Installation
 
-There are two ways to install the Git extension: using npm or manual installation.
+There are two ways to install the Git extension: using npm or manual installation. Node.js 22 or later is required.
 
 - **Step1:** run the following command:
 
@@ -71,7 +71,7 @@ git gpt commit // generate commit message with AI
   git gpt model
   ```
 
-  Choose from available models (gpt-6-luna, gpt-6.1-terra, gpt-6.2-sol). The default is gpt-6-luna, the cheapest and fastest.
+  Choose from available models (gpt-6-luna, gpt-6.1-terra, gpt-6.2-sol). The default is gpt-6-luna, the cheapest and fastest. If your saved config names a model OpenAI has retired (for example gpt-4o), the nearest GPT-6 model is used instead; the config file is not rewritten.
 
 - **Change Commit Message Language**
 
