@@ -3,7 +3,13 @@ import os from 'os'
 import path, { dirname } from 'path'
 import { fileURLToPath } from 'url'
 
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
+import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest'
+
+import {
+  availableModels,
+  defaults,
+  retiredModelReplacements,
+} from '../src/config/defaults.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -31,43 +37,65 @@ describe('Model Configuration', () => {
   })
 
   describe('Default Model', () => {
-    it('should have gpt-4o-mini as the default model', async () => {
-      // Check the default model in config defaults
-      const defaultsContent = fs.readFileSync(
-        path.join(__dirname, '..', 'src', 'config', 'defaults.js'),
-        'utf8',
-      )
-      expect(defaultsContent).toContain("model: 'gpt-4o-mini'")
+    test('new installs default to gpt-6-luna, the cheapest current model', () => {
+      // Assert
+      expect(defaults.model).toBe('gpt-6-luna')
     })
 
-    it('should include available OpenAI models in the selection list', async () => {
-      const defaultsContent = fs.readFileSync(
-        path.join(__dirname, '..', 'src', 'config', 'defaults.js'),
-        'utf8',
-      )
-
-      // Check for available models
-      expect(defaultsContent).toContain(
-        'gpt-4o-mini (Recommended - Fast & Affordable)',
-      )
-      expect(defaultsContent).toContain('gpt-4o (Flagship - Best Quality)')
-      expect(defaultsContent).toContain('gpt-4-turbo (High Performance)')
-      expect(defaultsContent).toContain('gpt-3.5-turbo (Legacy)')
+    test('model picker offers current GPT-6 models cheapest first, each with an accepted reasoning effort', () => {
+      // Assert
+      expect(availableModels).toEqual([
+        {
+          title: 'gpt-6-luna (Recommended - Fastest & Cheapest)',
+          value: 'gpt-6-luna',
+          reasoningEffort: 'none',
+        },
+        {
+          title: 'gpt-6.1-terra (Balanced - Clearer Writing)',
+          value: 'gpt-6.1-terra',
+          reasoningEffort: 'none',
+        },
+        {
+          title: 'gpt-6.2-sol (High Quality)',
+          value: 'gpt-6.2-sol',
+          reasoningEffort: 'low',
+        },
+      ])
     })
 
-    it('should save selected model to config file', () => {
-      // Create a test config
-      const testConfig = { model: 'gpt-4o' }
+    test('every retired model is swapped to a model the picker still offers', () => {
+      // Arrange
+      const offered = availableModels.map((model) => model.value)
+
+      // Act
+      const successors = [...new Set(Object.values(retiredModelReplacements))]
+
+      // Assert
+      expect(successors.every((successor) => offered.includes(successor))).toBe(
+        true,
+      )
+    })
+
+    test('model picker preselects the default model', () => {
+      // Assert
+      expect(availableModels[0].value).toBe('gpt-6-luna')
+    })
+
+    test('should save selected model to config file', () => {
+      // Arrange
+      const testConfig = { model: 'gpt-6.2-sol' }
+
+      // Act
       fs.writeFileSync(CONFIG_FILE, JSON.stringify(testConfig, null, 2))
 
-      // Read and verify
+      // Assert
       const savedConfig = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'))
-      expect(savedConfig.model).toBe('gpt-4o')
+      expect(savedConfig.model).toBe('gpt-6.2-sol')
     })
   })
 
   describe('Semantic Commit Messages', () => {
-    it('should have improved system prompt for semantic messages', async () => {
+    test('should have improved system prompt for semantic messages', async () => {
       const messageBuilderContent = fs.readFileSync(
         path.join(__dirname, '..', 'src', 'core', 'messageBuilder.js'),
         'utf8',
@@ -84,7 +112,7 @@ describe('Model Configuration', () => {
       )
     })
 
-    it('should include structured commit message examples in prompt', async () => {
+    test('should include structured commit message examples in prompt', async () => {
       const messageBuilderContent = fs.readFileSync(
         path.join(__dirname, '..', 'src', 'core', 'messageBuilder.js'),
         'utf8',
@@ -99,55 +127,35 @@ describe('Model Configuration', () => {
       )
     })
 
-    it('should use max_completion_tokens parameter (forward-compatible)', async () => {
+    test('should use max_completion_tokens parameter (forward-compatible)', async () => {
       const openaiServiceContent = fs.readFileSync(
         path.join(__dirname, '..', 'src', 'services', 'openai.js'),
         'utf8',
       )
 
-      // Check that max_completion_tokens is used (works with all models including o1)
+      // Check that max_completion_tokens is used (required by reasoning models)
       expect(openaiServiceContent).toContain('max_completion_tokens')
       // Should NOT contain deprecated parameter as the parameter name
       expect(openaiServiceContent).not.toMatch(/\bmax_tokens\s*:/)
     })
   })
 
-  describe('Model Selection Order', () => {
-    it('should list recommended model first', async () => {
-      const defaultsContent = fs.readFileSync(
-        path.join(__dirname, '..', 'src', 'config', 'defaults.js'),
-        'utf8',
-      )
-
-      // Extract the availableModels array
-      const modelsMatch = defaultsContent.match(
-        /export const availableModels = \[([\s\S]*?)\]/m,
-      )
-      expect(modelsMatch).toBeTruthy()
-
-      const modelsText = modelsMatch[1]
-
-      // Check that gpt-4o-mini appears before other models
-      const gpt4oMiniIndex = modelsText.indexOf("value: 'gpt-4o-mini'")
-      const gpt4oIndex = modelsText.indexOf("value: 'gpt-4o'")
-      const gpt35Index = modelsText.indexOf("value: 'gpt-3.5-turbo'")
-
-      expect(gpt4oMiniIndex).toBeLessThan(gpt4oIndex)
-      expect(gpt4oIndex).toBeLessThan(gpt35Index)
-    })
-  })
-
   describe('API Parameters', () => {
-    it('should use temperature 0.7 for balanced output', async () => {
-      const commitGeneratorContent = fs.readFileSync(
-        path.join(__dirname, '..', 'src', 'core', 'commitGenerator.js'),
-        'utf8',
-      )
+    test('never sends temperature, which GPT-6 models reject while reasoning', async () => {
+      // Arrange
+      const readSource = (...segments) =>
+        fs.readFileSync(path.join(__dirname, '..', 'src', ...segments), 'utf8')
 
-      expect(commitGeneratorContent).toContain('temperature: 0.7')
+      // Act
+      const openaiServiceContent = readSource('services', 'openai.js')
+      const commitGeneratorContent = readSource('core', 'commitGenerator.js')
+
+      // Assert
+      expect(openaiServiceContent).not.toMatch(/\btemperature\s*:/)
+      expect(commitGeneratorContent).not.toMatch(/\btemperature\s*:/)
     })
 
-    it('should not include deprecated n parameter', async () => {
+    test('should not include deprecated n parameter', async () => {
       const openaiServiceContent = fs.readFileSync(
         path.join(__dirname, '..', 'src', 'services', 'openai.js'),
         'utf8',

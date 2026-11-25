@@ -73,7 +73,9 @@ beforeEach(() => {
 import { mockOpenAIResponse } from './utils/mocks.js'
 
 // Mock response from OpenAI API
-const mockResponse = mockOpenAIResponse('Commit message', { model: 'gpt-4o' })
+const mockResponse = mockOpenAIResponse('Commit message', {
+  model: 'gpt-6.2-sol',
+})
 ```
 
 ### Mocking User Input

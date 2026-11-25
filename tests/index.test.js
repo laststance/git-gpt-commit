@@ -150,11 +150,11 @@ describe('Git GPT Commit', () => {
       // Verify that gptCommit was called
       await gitGptCommit.gptCommit({
         createCommit: true,
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-6-luna',
       })
       expect(gitGptCommit.gptCommit).toHaveBeenCalledWith({
         createCommit: true,
-        model: 'gpt-3.5-turbo',
+        model: 'gpt-6-luna',
       })
     })
 

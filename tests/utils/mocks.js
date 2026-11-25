@@ -8,7 +8,7 @@ import { vi } from 'vitest'
  */
 export function mockOpenAIResponse(content, options = {}) {
   const defaultResponse = {
-    model: options.model || 'gpt-4o-mini',
+    model: options.model || 'gpt-6-luna',
     choices: [
       {
         message: {

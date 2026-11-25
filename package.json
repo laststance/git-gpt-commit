@@ -1,7 +1,7 @@
 {
   "name": "@laststance/git-gpt-commit",
   "version": "0.11.0",
-  "description": "An AI-powered Git extension that generates commit messages using OpenAI's GPT models (GPT-3 to GPT-5), streamlining the commit process and improving developer productivity.",
+  "description": "An AI-powered Git extension that generates commit messages using OpenAI's GPT-6 models, streamlining the commit process and improving developer productivity.",
   "main": "index.js",
   "type": "module",
   "scripts": {
@@ -31,11 +31,14 @@
   "dependencies": {
     "commander": "^10.0.0",
     "dotenv": "^16.0.3",
-    "openai": "^5.0.2",
+    "openai": "^7.63.0",
     "prompts": "^2.4.2"
   },
   "bin": {
     "git-gpt": "./index.js"
+  },
+  "engines": {
+    "node": ">=22"
   },
   "volta": {
     "node": "24.13.0"

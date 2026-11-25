@@ -1,6 +1,6 @@
 import fs from 'fs'
 
-import { CONFIG_FILE, defaults } from './defaults.js'
+import { CONFIG_FILE, defaults, retiredModelReplacements } from './defaults.js'
 
 /**
  * ConfigManager - Single source of truth for configuration
@@ -16,7 +16,12 @@ export class ConfigManager {
   }
 
   /**
-   * Load configuration from disk
+   * Load configuration from disk.
+   *
+   * If the saved model is one OpenAI retired (see
+   * {@link retiredModelReplacements}), it is swapped for its successor in
+   * memory only. The file on disk is left unchanged.
+   *
    * @returns {object} The loaded configuration merged with defaults
    */
   load() {
@@ -25,6 +30,11 @@ export class ConfigManager {
         const fileContent = fs.readFileSync(this.configPath, 'utf8')
         const fileConfig = JSON.parse(fileContent)
         this.config = { ...defaults, ...fileConfig }
+        // Retired models fail with 404, so use the successor instead.
+        // Own keys only: "constructor" or "__proto__" must not hit Object.prototype.
+        if (Object.hasOwn(retiredModelReplacements, this.config.model)) {
+          this.config.model = retiredModelReplacements[this.config.model]
+        }
       }
     } catch (error) {
       console.error('Error loading configuration:', error.message)

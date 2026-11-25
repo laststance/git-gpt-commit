@@ -1,10 +1,10 @@
-import { describe, expect, it, vi } from 'vitest'
+import { describe, expect, test, vi } from 'vitest'
 
 import { generateCommitMessage } from '../../../src/core/commitGenerator.js'
 
 describe('commitGenerator', () => {
   describe('generateCommitMessage', () => {
-    it('generates and sanitizes commit message', async () => {
+    test('generates and sanitizes commit message', async () => {
       const mockOpenaiService = {
         generateCompletion: vi
           .fn()
@@ -16,7 +16,7 @@ describe('commitGenerator', () => {
         { openaiService: mockOpenaiService, client: mockClient },
         {
           diff: 'test diff',
-          model: 'gpt-4o-mini',
+          model: 'gpt-6-luna',
           language: 'English',
           prefixEnabled: true,
         },
@@ -26,7 +26,7 @@ describe('commitGenerator', () => {
       expect(result).toBe('feat: add new feature')
     })
 
-    it('passes correct parameters to openai service', async () => {
+    test('passes correct parameters to openai service', async () => {
       const mockOpenaiService = {
         generateCompletion: vi.fn().mockResolvedValue('test message'),
       }
@@ -36,7 +36,7 @@ describe('commitGenerator', () => {
         { openaiService: mockOpenaiService, client: mockClient },
         {
           diff: 'my diff',
-          model: 'gpt-4o',
+          model: 'gpt-6.2-sol',
           language: '日本語',
           prefixEnabled: false,
         },
@@ -45,9 +45,9 @@ describe('commitGenerator', () => {
       expect(mockOpenaiService.generateCompletion).toHaveBeenCalledWith(
         mockClient,
         expect.objectContaining({
-          model: 'gpt-4o',
-          temperature: 0.7,
-          maxTokens: 200,
+          model: 'gpt-6.2-sol',
+          reasoningEffort: 'low',
+          maxTokens: 1000,
         }),
       )
 
@@ -61,7 +61,98 @@ describe('commitGenerator', () => {
       expect(messages[1].content).toContain('my diff')
     })
 
-    it('propagates errors from openai service', async () => {
+    test('asks gpt-6-luna for no reasoning so the default model stays fast and cheap', async () => {
+      // Arrange
+      const mockOpenaiService = {
+        generateCompletion: vi.fn().mockResolvedValue('feat: add login'),
+      }
+
+      // Act
+      await generateCommitMessage(
+        { openaiService: mockOpenaiService, client: {} },
+        {
+          diff: 'diff',
+          model: 'gpt-6-luna',
+          language: 'English',
+          prefixEnabled: true,
+        },
+      )
+
+      // Assert
+      const params = mockOpenaiService.generateCompletion.mock.calls[0][1]
+      expect(params.reasoningEffort).toBe('none')
+    })
+
+    test('leaves reasoning effort unset for a model added by hand to the config file', async () => {
+      // Arrange
+      const mockOpenaiService = {
+        generateCompletion: vi.fn().mockResolvedValue('feat: add login'),
+      }
+
+      // Act
+      await generateCommitMessage(
+        { openaiService: mockOpenaiService, client: {} },
+        {
+          diff: 'diff',
+          model: 'gpt-5.4-mini',
+          language: 'English',
+          prefixEnabled: true,
+        },
+      )
+
+      // Assert
+      const params = mockOpenaiService.generateCompletion.mock.calls[0][1]
+      expect(params.reasoningEffort).toBeUndefined()
+    })
+
+    test('refuses an emoji-only reply when emojis are off instead of attempting an empty commit', async () => {
+      // Arrange
+      const mockOpenaiService = {
+        generateCompletion: vi.fn().mockResolvedValue('🚀 ✨'),
+      }
+
+      // Act
+      const result = generateCommitMessage(
+        { openaiService: mockOpenaiService, client: {} },
+        {
+          diff: 'diff',
+          model: 'gpt-6-luna',
+          language: 'English',
+          prefixEnabled: true,
+          allowEmojis: false,
+        },
+      )
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        'The generated commit message was empty after removing quotes and emojis. Try again, or choose another model with: git gpt model',
+      )
+    })
+
+    test('refuses a reply made only of quotes instead of attempting an empty commit', async () => {
+      // Arrange
+      const mockOpenaiService = {
+        generateCompletion: vi.fn().mockResolvedValue('"" \'\''),
+      }
+
+      // Act
+      const result = generateCommitMessage(
+        { openaiService: mockOpenaiService, client: {} },
+        {
+          diff: 'diff',
+          model: 'gpt-6-luna',
+          language: 'English',
+          prefixEnabled: true,
+        },
+      )
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        'The generated commit message was empty after removing quotes and emojis. Try again, or choose another model with: git gpt model',
+      )
+    })
+
+    test('propagates errors from openai service', async () => {
       const mockOpenaiService = {
         generateCompletion: vi.fn().mockRejectedValue(new Error('API Error')),
       }
@@ -71,7 +162,7 @@ describe('commitGenerator', () => {
           { openaiService: mockOpenaiService, client: {} },
           {
             diff: 'diff',
-            model: 'gpt-4o-mini',
+            model: 'gpt-6-luna',
             language: 'English',
             prefixEnabled: true,
           },
