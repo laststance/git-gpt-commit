@@ -105,6 +105,53 @@ describe('commitGenerator', () => {
       expect(params.reasoningEffort).toBeUndefined()
     })
 
+    test('refuses an emoji-only reply when emojis are off instead of attempting an empty commit', async () => {
+      // Arrange
+      const mockOpenaiService = {
+        generateCompletion: vi.fn().mockResolvedValue('🚀 ✨'),
+      }
+
+      // Act
+      const result = generateCommitMessage(
+        { openaiService: mockOpenaiService, client: {} },
+        {
+          diff: 'diff',
+          model: 'gpt-6-luna',
+          language: 'English',
+          prefixEnabled: true,
+          allowEmojis: false,
+        },
+      )
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        'The generated commit message was empty after removing quotes and emojis. Try again, or choose another model with: git gpt model',
+      )
+    })
+
+    test('refuses a reply made only of quotes instead of attempting an empty commit', async () => {
+      // Arrange
+      const mockOpenaiService = {
+        generateCompletion: vi.fn().mockResolvedValue('"" \'\''),
+      }
+
+      // Act
+      const result = generateCommitMessage(
+        { openaiService: mockOpenaiService, client: {} },
+        {
+          diff: 'diff',
+          model: 'gpt-6-luna',
+          language: 'English',
+          prefixEnabled: true,
+        },
+      )
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        'The generated commit message was empty after removing quotes and emojis. Try again, or choose another model with: git gpt model',
+      )
+    })
+
     test('propagates errors from openai service', async () => {
       const mockOpenaiService = {
         generateCompletion: vi.fn().mockRejectedValue(new Error('API Error')),

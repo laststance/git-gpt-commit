@@ -70,11 +70,18 @@ export async function generateCompletion(client, params) {
     throw new Error(`OpenAI API Error: ${err.message}`)
   }
 
-  const content = response.choices[0]?.message?.content?.trim()
+  const choice = response.choices[0]
+  const content = choice?.message?.content?.trim()
   // Reasoning can use the whole token budget and leave no visible text
   if (!content) {
     throw new Error(
       'OpenAI returned an empty commit message. Try again, or choose another model with: git gpt model',
+    )
+  }
+  // Hitting the token cap cuts the subject mid-sentence, so never offer it
+  if (choice.finish_reason === 'length') {
+    throw new Error(
+      'OpenAI stopped before finishing the commit message. Try again, or choose another model with: git gpt model',
     )
   }
   return content

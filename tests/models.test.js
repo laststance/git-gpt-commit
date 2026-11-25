@@ -5,7 +5,11 @@ import { fileURLToPath } from 'url'
 
 import { describe, expect, test, vi, beforeEach, afterEach } from 'vitest'
 
-import { availableModels, defaults } from '../src/config/defaults.js'
+import {
+  availableModels,
+  defaults,
+  retiredModelReplacements,
+} from '../src/config/defaults.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = dirname(__filename)
@@ -57,6 +61,19 @@ describe('Model Configuration', () => {
           reasoningEffort: 'low',
         },
       ])
+    })
+
+    test('every retired model is swapped to a model the picker still offers', () => {
+      // Arrange
+      const offered = availableModels.map((model) => model.value)
+
+      // Act
+      const successors = [...new Set(Object.values(retiredModelReplacements))]
+
+      // Assert
+      expect(successors.every((successor) => offered.includes(successor))).toBe(
+        true,
+      )
     })
 
     test('model picker preselects the default model', () => {

@@ -69,7 +69,7 @@ describe('ConfigManager', () => {
       expect(config.model).toBe('gpt-6-luna')
     })
 
-    test('switches every retired model from the old picker to its successor', () => {
+    test('switches every model that past releases offered in the picker to its GPT-6 successor', () => {
       // Arrange
       const loadModel = (savedModel) => {
         fs.writeFileSync(testConfigPath, JSON.stringify({ model: savedModel }))
@@ -78,17 +78,62 @@ describe('ConfigManager', () => {
 
       // Act
       const loaded = {
-        'gpt-4o': loadModel('gpt-4o'),
-        'gpt-4-turbo': loadModel('gpt-4-turbo'),
+        'gpt-3.5-turbo-instruct': loadModel('gpt-3.5-turbo-instruct'),
         'gpt-3.5-turbo': loadModel('gpt-3.5-turbo'),
+        'gpt-4': loadModel('gpt-4'),
+        'gpt-4-turbo': loadModel('gpt-4-turbo'),
+        'gpt-4.1-nano': loadModel('gpt-4.1-nano'),
+        'gpt-4.1-mini': loadModel('gpt-4.1-mini'),
+        'gpt-4o': loadModel('gpt-4o'),
+        'gpt-5-thinking': loadModel('gpt-5-thinking'),
       }
 
       // Assert
       expect(loaded).toEqual({
-        'gpt-4o': 'gpt-6-luna',
-        'gpt-4-turbo': 'gpt-6.2-sol',
+        'gpt-3.5-turbo-instruct': 'gpt-6.1-terra',
         'gpt-3.5-turbo': 'gpt-6.1-terra',
+        'gpt-4': 'gpt-6.2-sol',
+        'gpt-4-turbo': 'gpt-6.2-sol',
+        'gpt-4.1-nano': 'gpt-6-luna',
+        'gpt-4.1-mini': 'gpt-6-luna',
+        'gpt-4o': 'gpt-6-luna',
+        'gpt-5-thinking': 'gpt-6.2-sol',
       })
+    })
+
+    test('switches a saved GPT-5 family model to its successor so commits survive the 2026-12-11 shutdown', () => {
+      // Arrange
+      const loadModel = (savedModel) => {
+        fs.writeFileSync(testConfigPath, JSON.stringify({ model: savedModel }))
+        return new ConfigManager(testConfigPath).load().model
+      }
+
+      // Act
+      const loaded = {
+        'gpt-5': loadModel('gpt-5'),
+        'gpt-5-mini': loadModel('gpt-5-mini'),
+        'gpt-5-nano': loadModel('gpt-5-nano'),
+        'gpt-5-pro': loadModel('gpt-5-pro'),
+      }
+
+      // Assert
+      expect(loaded).toEqual({
+        'gpt-5': 'gpt-6.2-sol',
+        'gpt-5-mini': 'gpt-6.1-terra',
+        'gpt-5-nano': 'gpt-6-luna',
+        'gpt-5-pro': 'gpt-6.2-sol',
+      })
+    })
+
+    test('keeps a hand-set model named like an Object.prototype key instead of swapping in a function', () => {
+      // Arrange
+      fs.writeFileSync(testConfigPath, JSON.stringify({ model: 'constructor' }))
+
+      // Act
+      const config = configManager.load()
+
+      // Assert
+      expect(config.model).toBe('constructor')
     })
 
     test('leaves the config file untouched when a retired model is switched', () => {

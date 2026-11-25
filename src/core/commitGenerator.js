@@ -19,7 +19,9 @@ import { buildMessages } from './messageBuilder.js'
  * @param {string} options.language - The target language
  * @param {boolean} options.prefixEnabled - Whether to use prefixes
  * @param {boolean} [options.allowEmojis=true] - Whether to allow emojis
- * @returns {Promise<string>} The sanitized commit message
+ * @returns {Promise<string>} The sanitized, trimmed commit message
+ * @throws {Error} When the message is empty after sanitizing, plus any error
+ *   from {@link generateCompletion}
  */
 export async function generateCommitMessage(deps, options) {
   const { openaiService, client } = deps
@@ -37,5 +39,12 @@ export async function generateCommitMessage(deps, options) {
     maxTokens: 1000,
   })
 
-  return sanitizeCommitMessage(rawMessage, allowEmojis)
+  const message = sanitizeCommitMessage(rawMessage, allowEmojis).trim()
+  // A reply made only of quotes or (with emojis off) emojis sanitizes to nothing
+  if (!message) {
+    throw new Error(
+      'The generated commit message was empty after removing quotes and emojis. Try again, or choose another model with: git gpt model',
+    )
+  }
+  return message
 }

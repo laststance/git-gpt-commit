@@ -30,9 +30,11 @@ export class ConfigManager {
         const fileContent = fs.readFileSync(this.configPath, 'utf8')
         const fileConfig = JSON.parse(fileContent)
         this.config = { ...defaults, ...fileConfig }
-        // Retired models fail with 404, so use the successor instead
-        this.config.model =
-          retiredModelReplacements[this.config.model] ?? this.config.model
+        // Retired models fail with 404, so use the successor instead.
+        // Own keys only: "constructor" or "__proto__" must not hit Object.prototype.
+        if (Object.hasOwn(retiredModelReplacements, this.config.model)) {
+          this.config.model = retiredModelReplacements[this.config.model]
+        }
       }
     } catch (error) {
       console.error('Error loading configuration:', error.message)

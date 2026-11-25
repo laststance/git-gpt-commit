@@ -198,6 +198,36 @@ describe('openai service', () => {
       )
     })
 
+    test('refuses a subject cut off by the token cap instead of offering it as the commit message', async () => {
+      // Arrange
+      const mockClient = {
+        chat: {
+          completions: {
+            create: vi.fn().mockResolvedValue({
+              choices: [
+                {
+                  message: { content: 'fix: handle' },
+                  finish_reason: 'length',
+                },
+              ],
+            }),
+          },
+        },
+      }
+
+      // Act
+      const result = generateCompletion(mockClient, {
+        model: 'gpt-6.2-sol',
+        messages: [],
+        reasoningEffort: 'low',
+      })
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        'OpenAI stopped before finishing the commit message. Try again, or choose another model with: git gpt model',
+      )
+    })
+
     test('throws ApiKeyError on 401 status', async () => {
       const mockClient = {
         chat: {
