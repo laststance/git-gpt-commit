@@ -34,7 +34,8 @@ export function createClient(apiKey) {
  * @throws {ApiKeyError} When API key is invalid (401)
  * @throws {ModelNotFoundError} When the model is unknown or retired (404)
  * @throws {RateLimitError} When rate limit is exceeded (429)
- * @throws {Error} When the reply has no text, or for other API errors
+ * @throws {Error} When the reply has no text, was cut off by the token cap or
+ *   the content filter, or for other API errors
  *
  * @example
  * ```js
@@ -82,6 +83,12 @@ export async function generateCompletion(client, params) {
   if (choice.finish_reason === 'length') {
     throw new Error(
       'OpenAI stopped before finishing the commit message. Try again, or choose another model with: git gpt model',
+    )
+  }
+  // The content filter drops part of the reply, so the text left is not a full message
+  if (choice.finish_reason === 'content_filter') {
+    throw new Error(
+      "OpenAI's content filter cut the commit message short. Try again, or choose another model with: git gpt model",
     )
   }
   return content

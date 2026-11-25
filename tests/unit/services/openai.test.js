@@ -228,6 +228,36 @@ describe('openai service', () => {
       )
     })
 
+    test('refuses a reply cut short by the content filter instead of offering the partial text as the commit message', async () => {
+      // Arrange
+      const mockClient = {
+        chat: {
+          completions: {
+            create: vi.fn().mockResolvedValue({
+              choices: [
+                {
+                  message: { content: 'feat: add user' },
+                  finish_reason: 'content_filter',
+                },
+              ],
+            }),
+          },
+        },
+      }
+
+      // Act
+      const result = generateCompletion(mockClient, {
+        model: 'gpt-6-luna',
+        messages: [],
+        reasoningEffort: 'none',
+      })
+
+      // Assert
+      await expect(result).rejects.toThrow(
+        "OpenAI's content filter cut the commit message short. Try again, or choose another model with: git gpt model",
+      )
+    })
+
     test('throws ApiKeyError on 401 status', async () => {
       const mockClient = {
         chat: {
