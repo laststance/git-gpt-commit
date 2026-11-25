@@ -1,4 +1,4 @@
-import { exec as originalExec, execSync } from 'child_process'
+import { exec as originalExec, execFileSync, execSync } from 'child_process'
 import { promisify } from 'util'
 
 import { GitError, NoChangesError } from './errors.js'
@@ -30,13 +30,25 @@ export async function getStagedDiff() {
 }
 
 /**
- * Execute a git commit with the given message
+ * Create a git commit with the given message.
+ *
+ * Called by the `git gpt commit` handler after the user confirms the generated
+ * message. The message comes from the model, so it is handed to git as an
+ * argument without a shell: `$(...)`, `$VAR` or `;` in it stay literal text
+ * instead of being run.
+ *
  * @param {string} message - The commit message
  * @throws {GitError} When git commit fails
+ *
+ * @example
+ * ```js
+ * executeCommit('feat: add login form')
+ * ```
  */
 export function executeCommit(message) {
   try {
-    execSync(`git commit -m "${message}"`)
+    // No shell: model output must never be parsed as shell syntax
+    execFileSync('git', ['commit', '-m', message])
   } catch (error) {
     throw new GitError(`Failed to commit: ${error.message}`)
   }
