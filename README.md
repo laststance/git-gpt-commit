@@ -71,7 +71,7 @@ git gpt commit // generate commit message with AI
   git gpt model
   ```
 
-  Choose from available models (gpt-4o, gpt-3.5-turbo-instruct, gpt-4-turbo, gpt-4).
+  Choose from available models (gpt-6-luna, gpt-6.1-terra, gpt-6.2-sol). The default is gpt-6-luna, the cheapest and fastest.
 
 - **Change Commit Message Language**
 

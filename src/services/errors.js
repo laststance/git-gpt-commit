@@ -18,7 +18,7 @@ export class ApiKeyError extends Error {
  */
 export class ModelNotFoundError extends Error {
   constructor(model) {
-    super(`Model "${model}" not found`)
+    super(`Model "${model}" not found. Choose another with: git gpt model`)
     this.name = 'ModelNotFoundError'
     this.model = model
   }
